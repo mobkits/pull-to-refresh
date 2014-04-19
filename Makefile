@@ -6,7 +6,7 @@ components: component.json
 	@component install --dev
 
 doc:
-	@component build
+	@component build --dev
 	@rm -fr .gh-pages
 	@mkdir .gh-pages
 	@mv build .gh-pages/
