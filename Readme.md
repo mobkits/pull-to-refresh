@@ -8,6 +8,12 @@
 
   Tip: Avoid to use transition with dragging.
 
+## Features
+
+* origin scroll, better performance.
+* optional options for setting texts and timeout.
+* call refresh as you need.
+* simplified code and API.
 
 ## Installation
 
@@ -15,7 +21,7 @@
 
     $ component install chemzqm/pull-to-refresh
 
-## API
+## Example
 
 ``` html
 <div id="demo">
@@ -29,6 +35,20 @@
 ```
 * dom tree should like this, `#demo` is used to define the scroll area.
 
+``` js
+  var el = document.getElementById('demo');
+  var ptr = require('pull-to-refresh');
+  var domify = require('domify');
+  var list =el.querySelector('.content');
+  var my_ptr = ptr(el, function(cb) {
+      ajax_and_prepend_dom( )//load your data and append them to the list
+      cb(); //don't forget to call callback!
+    }, 1000);
+  });
+```
+
+## API
+
 ### ptr(el, [option], callback)
 
 * `callback` is called when loading start, the first argument which is a callback function should be called after the dom prepend to the list.
@@ -36,7 +56,7 @@
 
 ### .refresh()
 
-handy API to perform refresh.
+Perform refresh (with animation scroll to top at first).
 
 ## License
 
