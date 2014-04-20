@@ -39,6 +39,7 @@ module.exports = function PTR(el, opt, fn) {
   events.bind(el, 'touchmove', function (e) {
     var rotate = 90;
     e.stopPropagation();
+    //prevent user scroll when we are loading or scrolling
     if (scrolling || loading) return e.preventDefault();
     var top = el.scrollTop;
     if (top < 0) {
