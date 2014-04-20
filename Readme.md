@@ -6,6 +6,8 @@
 
   **works on touch device only**
 
+  Avoid to use transition with dragging.
+
 
 ## Installation
 
@@ -27,9 +29,14 @@
 ```
 * dom tree should like this, `#demo` is used to define the scroll area.
 
-### ptr(el, callback)
+### ptr(el, [option], callback)
 
 * `callback` is called when loading start, the first argument which is a callback function should be called after the dom prepend to the list.
+* `option` object could contain `PULL_TEXT` `RELEASE_TEXT` `LOADING_TEXT` and `timeout` for the request timeout in millisecond.
+
+### .refresh()
+
+handy API to perform refresh.
 
 ## License
 
