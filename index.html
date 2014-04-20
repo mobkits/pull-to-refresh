@@ -94,8 +94,8 @@
 </head>
 <body>
   <div class="main-container">
-    <header onclick="document.getElementById('list').scrollTop = 1;">
-      <h1>下拉刷新</h1>
+    <header>
+      <h1>点击刷新</h1>
     </header>
     <div id="demo">
       <div class="ptr_scrollable">
@@ -196,7 +196,7 @@
     var ptr = require('pull-to-refresh');
     var domify = require('domify');
     var list =el.querySelector('.content');
-    ptr(el, function(cb) {
+    var my_ptr = ptr(el, function(cb) {
       var n = Math.floor(Math.random() * 10);
       var html = '';
       for (var i = 0; i < 5; i ++) {
@@ -207,6 +207,10 @@
         list.insertBefore(dom, list.firstElementChild);
         cb();
       }, 1000);
+    });
+    //
+    document.querySelector('header').addEventListener('touchend', function() {
+      my_ptr.refresh();
     });
   </script>
 </body>

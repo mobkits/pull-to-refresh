@@ -1053,6 +1053,7 @@ var Tween = require(\"component~tween@1.1.0\");\n\
 var raf = require(\"component~raf@1.1.3\");\n\
 var once = require(\"component~once@0.0.1\");\n\
 var template = require(\"pull-to-refresh/template.html\");\n\
+var dom = domify(template);\n\
 \n\
 var LOADING_TEXT = '加载中...';\n\
 var PULL_TEXT = '下拉刷新';\n\
@@ -1062,10 +1063,19 @@ events.bind(document, 'touchmove', function (e) {\n\
   e.preventDefault();\n\
 });\n\
 \n\
-var ptr = module.exports = function (el, fn) {\n\
+module.exports = function PTR(el, opt, fn) {\n\
+  if (!(this instanceof PTR)) return new PTR(el, opt, fn);\n\
+  if (typeof opt === 'function') {\n\
+    fn = opt;\n\
+    opt = {};\n\
+  }\n\
+  this.LOADING_TEXT = opt.LOADING_TEXT || LOADING_TEXT;\n\
+  this.PULL_TEXT = opt.PULL_TEXT || PULL_TEXT;\n\
+  this.RELEASE_TEXT = opt.RELEASE_TEXT || RELEASE_TEXT;\n\
+  this.timeout = opt.timeout || 10000;\n\
   var load;\n\
   var loading;\n\
-  var dom = domify(template);\n\
+  var scrolling;\n\
   el = el.firstElementChild;\n\
   var wrapper = el.querySelector('.ptr_wrap');\n\
   wrapper.insertBefore(dom, wrapper.firstElementChild);\n\
@@ -1077,81 +1087,90 @@ var ptr = module.exports = function (el, fn) {\n\
   events.bind(el, 'touchmove', function (e) {\n\
     var rotate = 90;\n\
     e.stopPropagation();\n\
-    if (loading) return;\n\
+    if (scrolling || loading) return e.preventDefault();\n\
     var top = el.scrollTop;\n\
     if (top < 0) {\n\
       box.style.right = '0px';\n\
     }\n\
     if (top < - 25 && top >= - 50) {\n\
       rotate = 90 - (-25 - top) * 7.2;\n\
-      text.innerHTML = '下拉刷新';\n\
+      text.innerHTML = this.PULL_TEXT;\n\
     }\n\
     if (top < -50) {\n\
       rotate = -90;\n\
-      text.innerHTML = RELEASE_TEXT;\n\
+      text.innerHTML = this.RELEASE_TEXT;\n\
       e.preventDefault();\n\
       load = true;\n\
     } else {\n\
       load = false;\n\
     }\n\
     img.style['-webkit-transform'] = 'scale(1) rotate(' + rotate + 'deg)';\n\
-  })\n\
+  }.bind(this));\n\
 \n\
   function callback() {\n\
     loading = false;\n\
     wrapper.style.top = '0px';\n\
-    text.innerHTML = PULL_TEXT;\n\
+    text.innerHTML = this.PULL_TEXT;\n\
     img.className = 'ptr_image';\n\
     box.style.right = '99%';\n\
     scrollTo(el, 1);\n\
   }\n\
 \n\
-  events.bind(el, 'touchend', function (e) {\n\
-    if (load) {\n\
+  var refresh = this.refresh = function () {\n\
+      box.style.right = '0px';\n\
       wrapper.style.top = '51px';\n\
       img.className += ' ptr_loading';\n\
-      text.innerHTML = LOADING_TEXT;\n\
+      text.innerHTML = this.LOADING_TEXT;\n\
       loading = true;\n\
-      scrollTo(el, 1);\n\
-      var timeout = setTimeout(callback, 10000);\n\
-      var cb = once(function () {\n\
-        clearTimeout(timeout);\n\
-        callback();\n\
-      });\n\
-      fn(cb);\n\
+      scrollTo(el, 1, function () {\n\
+        var timeout = setTimeout(callback, this.timeout);\n\
+        var cb = once(function () {\n\
+          clearTimeout(timeout);\n\
+          callback();\n\
+        });\n\
+        fn(cb);\n\
+      }.bind(this));\n\
+  }.bind(this);\n\
+\n\
+  events.bind(el, 'touchend', function (e) {\n\
+    if (load) {\n\
+      refresh();\n\
     }\n\
     load = false;\n\
   })\n\
-}\n\
 \n\
-function scrollTo(el, y) {\n\
-  var start = {\n\
-    top: el.scrollTop\n\
+  function scrollTo(el, y, cb) {\n\
+    scrolling = true;\n\
+    var start = {\n\
+      top: el.scrollTop\n\
+    }\n\
+    // setup tween\n\
+    var tween = Tween(start)\n\
+      .ease( 'out-circ')\n\
+      .to({ top: y})\n\
+      .duration( 1000);\n\
+\n\
+    // scroll\n\
+    tween.update(function(o){\n\
+      el.scrollTop = o.top;\n\
+    });\n\
+\n\
+    // handle end\n\
+    tween.on('end', function(){\n\
+      animate = function(){};\n\
+      scrolling = false;\n\
+      cb();\n\
+    });\n\
+\n\
+    // animate\n\
+    function animate() {\n\
+      raf(animate);\n\
+      tween.update();\n\
+    }\n\
+\n\
+    animate();\n\
+    return tween;\n\
   }\n\
-  // setup tween\n\
-  var tween = Tween(start)\n\
-    .ease( 'out-circ')\n\
-    .to({ top: y})\n\
-    .duration( 1000);\n\
-\n\
-  // scroll\n\
-  tween.update(function(o){\n\
-    el.scrollTop = o.top;\n\
-  });\n\
-\n\
-  // handle end\n\
-  tween.on('end', function(){\n\
-    animate = function(){};\n\
-  });\n\
-\n\
-  // animate\n\
-  function animate() {\n\
-    raf(animate);\n\
-    tween.update();\n\
-  }\n\
-\n\
-  animate();\n\
-  return tween;\n\
 }\n\
 \n\
 //# sourceURL=index.js"
