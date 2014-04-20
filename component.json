@@ -26,5 +26,6 @@
   "styles": [
     "ptr.css"
   ],
+  "demo": "http://chemzqm.github.io/pull-to-refresh/",
   "repository": "chemzqm/pull-to-refresh"
 }
