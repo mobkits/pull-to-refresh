@@ -1,12 +1,12 @@
 # Pull-to-refresh
 
-  A pull to refresh component.
+  A pull to refresh component for user loves elegence solution.
 
   [demo](http://chemzqm.github.io/pull-to-refresh).
 
   **works on touch device only**
 
-  Avoid to use transition with dragging.
+  Tip: Avoid to use transition with dragging.
 
 
 ## Installation
