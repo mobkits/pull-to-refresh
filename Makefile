@@ -9,7 +9,7 @@ watch:
 	@component build --dev -w
 
 doc:
-	@component build -c
+	@component build --dev -c
 	@rm -fr .gh-pages
 	@mkdir .gh-pages
 	@mv build .gh-pages/
