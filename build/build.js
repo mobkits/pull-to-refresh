@@ -1019,7 +1019,7 @@ module.exports = function PTR(el, opt, fn) {
   this.PULL_TEXT = opt.PULL_TEXT || PULL_TEXT;
   this.RELEASE_TEXT = opt.RELEASE_TEXT || RELEASE_TEXT;
   this.timeout = opt.timeout || 10000;
-  var load;
+  var start;
   var loading;
   var scrolling;
   el = el.firstElementChild;
@@ -1031,7 +1031,7 @@ module.exports = function PTR(el, opt, fn) {
   el.scrollTop = 1;
 
   events.bind(el, 'touchmove', function (e) {
-    var rotate = 90;
+    var rotate = 0;
     e.stopPropagation();
     //prevent user scroll when we are loading or scrolling
     if (scrolling || loading) return e.preventDefault();
@@ -1039,19 +1039,19 @@ module.exports = function PTR(el, opt, fn) {
     if (top < 0) {
       box.style.right = '0px';
     }
-    if (top < - 25 && top >= - 50) {
-      rotate = 90 - (-25 - top) * 7.2;
+    if (top < 0 && top >= - 40) {
       text.innerHTML = this.PULL_TEXT;
     }
-    if (top < -50) {
-      rotate = -90;
+    if (top < -40) {
+      classes(img).add('ptr_rotate');
       text.innerHTML = this.RELEASE_TEXT;
       e.preventDefault();
-      load = true;
+      start = true;
     } else {
-      load = false;
+      classes(img).remove('ptr_rotate');
+      start = false;
     }
-    img.style['-webkit-transform'] = 'scale(1) rotate(' + rotate + 'deg)';
+    //img.style['-webkit-transform'] = 'scale(1) rotate(' + rotate + 'deg)';
   }.bind(this));
 
   function callback() {
@@ -1065,7 +1065,7 @@ module.exports = function PTR(el, opt, fn) {
 
   var refresh = this.refresh = function () {
       box.style.right = '0px';
-      wrapper.style.top = '51px';
+      wrapper.style.top = '41px';
       img.className += ' ptr_loading';
       text.innerHTML = this.LOADING_TEXT;
       loading = true;
@@ -1080,10 +1080,10 @@ module.exports = function PTR(el, opt, fn) {
   }.bind(this);
 
   events.bind(el, 'touchend', function (e) {
-    if (load) {
+    if (start) {
       refresh();
     }
-    load = false;
+    start = false;
   })
 
   function scrollTo(el, y, cb) {
