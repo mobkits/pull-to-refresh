@@ -24,14 +24,13 @@
 ## Example
 
 ``` html
-<div id="demo">
-  <div class="ptr_scrollable">
-    <div class="ptr_wrap">
-      <ul>
-        <li></li>
-      </ul>
-    <div>
-  </div>
+<div id="demo" class="ptr_scrollable">
+  <div class="ptr_wrap">
+    <ul>
+      <li></li>
+    </ul>
+  <div>
+</div>
 ```
 * dom tree should like this, `#demo` is used to define the scroll area.
 

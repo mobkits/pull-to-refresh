@@ -11,10 +11,6 @@ var LOADING_TEXT = '加载中...';
 var PULL_TEXT = '下拉刷新';
 var RELEASE_TEXT = '释放更新';
 
-events.bind(document, 'touchmove', function (e) {
-  e.preventDefault();
-});
-
 module.exports = function PTR(el, opt, fn) {
   if (!(this instanceof PTR)) return new PTR(el, opt, fn);
   if (typeof opt === 'function') {
@@ -28,62 +24,52 @@ module.exports = function PTR(el, opt, fn) {
   var start;
   var loading;
   var scrolling;
-  el = el.firstElementChild;
   var wrapper = el.querySelector('.ptr_wrap');
   wrapper.insertBefore(dom, wrapper.firstElementChild);
-  var box = el.querySelector('.ptr_box');
   var img = el.querySelector('.ptr_image');
   var text = el.querySelector('.ptr_text');
-  el.scrollTop = 1;
 
   events.bind(el, 'touchmove', function (e) {
     var rotate = 0;
-    e.stopPropagation();
     //prevent user scroll when we are loading or scrolling
     if (scrolling || loading) return e.preventDefault();
     var top = el.scrollTop;
-    if (top < 0) {
-      box.style.right = '0px';
-    }
     if (top < 0 && top >= - 40) {
-      text.innerHTML = this.PULL_TEXT;
+      text.textContent = this.PULL_TEXT;
     }
     if (top < -40) {
       classes(img).add('ptr_rotate');
-      text.innerHTML = this.RELEASE_TEXT;
+      text.textContent = this.RELEASE_TEXT;
       e.preventDefault();
       start = true;
     } else {
       classes(img).remove('ptr_rotate');
       start = false;
     }
-    //img.style['-webkit-transform'] = 'scale(1) rotate(' + rotate + 'deg)';
   }.bind(this));
 
+  var self = this;
   function callback() {
     loading = false;
-    wrapper.style.top = '0px';
-    text.innerHTML = this.PULL_TEXT;
+    wrapper.style.webkitTransform = 'translateY(0px)';
+    text.textContent = self.PULL_TEXT;
     img.className = 'ptr_image';
-    box.style.right = '99%';
-    scrollTo(el, 1);
   }
 
   var refresh = this.refresh = function () {
-      box.style.right = '0px';
-      wrapper.style.top = '41px';
+      wrapper.style.webkitTransform = 'translateY(40px)';
       img.className += ' ptr_loading';
-      text.innerHTML = this.LOADING_TEXT;
+      text.textContent = self.LOADING_TEXT;
       loading = true;
       scrollTo(el, 1, function () {
-        var timeout = setTimeout(callback, this.timeout);
+        var timeout = setTimeout(callback, self.timeout);
         var cb = once(function () {
           clearTimeout(timeout);
           callback();
         });
         fn(cb);
-      }.bind(this));
-  }.bind(this);
+      });
+  };
 
   events.bind(el, 'touchend', function (e) {
     if (start) {
@@ -99,7 +85,7 @@ module.exports = function PTR(el, opt, fn) {
     }
     // setup tween
     var tween = Tween(start)
-      .ease( 'out-circ')
+      .ease('out-circ')
       .to({ top: y})
       .duration( 1000);
 
@@ -111,6 +97,7 @@ module.exports = function PTR(el, opt, fn) {
     // handle end
     tween.on('end', function(){
       animate = function(){};
+      tween = null;
       scrolling = false;
       cb();
     });
@@ -122,6 +109,5 @@ module.exports = function PTR(el, opt, fn) {
     }
 
     animate();
-    return tween;
   }
 }

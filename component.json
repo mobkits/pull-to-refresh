@@ -16,6 +16,7 @@
   },
   "development": {
     "dependencies": {
+      "chemzqm/scrollfix": "*"
     }
   },
   "license": "MIT",
