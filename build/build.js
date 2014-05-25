@@ -1045,6 +1045,40 @@ require.modules["component~classes"] = require.modules["component~classes@1.2.1"
 require.modules["classes"] = require.modules["component~classes@1.2.1"];
 
 
+require.register("chemzqm~scrollfix@0.0.1", Function("exports, module",
+"\n\
+//not draggable\n\
+document.addEventListener('touchmove', function(e) {\n\
+  e.preventDefault();\n\
+});\n\
+\n\
+module.exports = function (el) {\n\
+  //it could be scrollable;\n\
+  el.addEventListener('touchmove', function(e) {\n\
+    e.stopPropagation();\n\
+  })\n\
+\n\
+  var sy = 0;\n\
+  //prevent dragging at top\n\
+  el.addEventListener('touchstart', function(e) {\n\
+    sy = e.pageY;\n\
+    if (el.scrollTop === 0) {\n\
+      el.scrollTop = 1;\n\
+    } else if (el.scrollHeight == el.scrollTop + el.offsetHeight) {\n\
+      el.scrollTop = el.scrollTop - 1;\n\
+    }\n\
+  })\n\
+\n\
+}\n\
+\n\
+//# sourceURL=components/chemzqm/scrollfix/0.0.1/index.js"
+));
+
+require.modules["chemzqm-scrollfix"] = require.modules["chemzqm~scrollfix@0.0.1"];
+require.modules["chemzqm~scrollfix"] = require.modules["chemzqm~scrollfix@0.0.1"];
+require.modules["scrollfix"] = require.modules["chemzqm~scrollfix@0.0.1"];
+
+
 require.register("pull-to-refresh", Function("exports, module",
 "var events = require(\"component~event@0.1.3\");\n\
 var classes = require(\"component~classes@1.2.1\");\n\
@@ -1059,10 +1093,6 @@ var LOADING_TEXT = '加载中...';\n\
 var PULL_TEXT = '下拉刷新';\n\
 var RELEASE_TEXT = '释放更新';\n\
 \n\
-events.bind(document, 'touchmove', function (e) {\n\
-  e.preventDefault();\n\
-});\n\
-\n\
 module.exports = function PTR(el, opt, fn) {\n\
   if (!(this instanceof PTR)) return new PTR(el, opt, fn);\n\
   if (typeof opt === 'function') {\n\
@@ -1076,62 +1106,52 @@ module.exports = function PTR(el, opt, fn) {\n\
   var start;\n\
   var loading;\n\
   var scrolling;\n\
-  el = el.firstElementChild;\n\
   var wrapper = el.querySelector('.ptr_wrap');\n\
   wrapper.insertBefore(dom, wrapper.firstElementChild);\n\
-  var box = el.querySelector('.ptr_box');\n\
   var img = el.querySelector('.ptr_image');\n\
   var text = el.querySelector('.ptr_text');\n\
-  el.scrollTop = 1;\n\
 \n\
   events.bind(el, 'touchmove', function (e) {\n\
     var rotate = 0;\n\
-    e.stopPropagation();\n\
     //prevent user scroll when we are loading or scrolling\n\
     if (scrolling || loading) return e.preventDefault();\n\
     var top = el.scrollTop;\n\
-    if (top < 0) {\n\
-      box.style.right = '0px';\n\
-    }\n\
     if (top < 0 && top >= - 40) {\n\
-      text.innerHTML = this.PULL_TEXT;\n\
+      text.textContent = this.PULL_TEXT;\n\
     }\n\
     if (top < -40) {\n\
       classes(img).add('ptr_rotate');\n\
-      text.innerHTML = this.RELEASE_TEXT;\n\
+      text.textContent = this.RELEASE_TEXT;\n\
       e.preventDefault();\n\
       start = true;\n\
     } else {\n\
       classes(img).remove('ptr_rotate');\n\
       start = false;\n\
     }\n\
-    //img.style['-webkit-transform'] = 'scale(1) rotate(' + rotate + 'deg)';\n\
   }.bind(this));\n\
 \n\
+  var self = this;\n\
   function callback() {\n\
     loading = false;\n\
-    wrapper.style.top = '0px';\n\
-    text.innerHTML = this.PULL_TEXT;\n\
+    wrapper.style.webkitTransform = 'translateY(0px)';\n\
+    text.textContent = self.PULL_TEXT;\n\
     img.className = 'ptr_image';\n\
-    box.style.right = '99%';\n\
-    scrollTo(el, 1);\n\
   }\n\
 \n\
   var refresh = this.refresh = function () {\n\
-      box.style.right = '0px';\n\
-      wrapper.style.top = '41px';\n\
+      wrapper.style.webkitTransform = 'translateY(40px)';\n\
       img.className += ' ptr_loading';\n\
-      text.innerHTML = this.LOADING_TEXT;\n\
+      text.textContent = self.LOADING_TEXT;\n\
       loading = true;\n\
       scrollTo(el, 1, function () {\n\
-        var timeout = setTimeout(callback, this.timeout);\n\
+        var timeout = setTimeout(callback, self.timeout);\n\
         var cb = once(function () {\n\
           clearTimeout(timeout);\n\
           callback();\n\
         });\n\
         fn(cb);\n\
-      }.bind(this));\n\
-  }.bind(this);\n\
+      });\n\
+  };\n\
 \n\
   events.bind(el, 'touchend', function (e) {\n\
     if (start) {\n\
@@ -1147,7 +1167,7 @@ module.exports = function PTR(el, opt, fn) {\n\
     }\n\
     // setup tween\n\
     var tween = Tween(start)\n\
-      .ease( 'out-circ')\n\
+      .ease('out-circ')\n\
       .to({ top: y})\n\
       .duration( 1000);\n\
 \n\
@@ -1159,6 +1179,7 @@ module.exports = function PTR(el, opt, fn) {\n\
     // handle end\n\
     tween.on('end', function(){\n\
       animate = function(){};\n\
+      tween = null;\n\
       scrolling = false;\n\
       cb();\n\
     });\n\
@@ -1170,7 +1191,6 @@ module.exports = function PTR(el, opt, fn) {\n\
     }\n\
 \n\
     animate();\n\
-    return tween;\n\
   }\n\
 }\n\
 \n\
