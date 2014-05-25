@@ -4,7 +4,7 @@
 
   [demo](http://chemzqm.github.io/pull-to-refresh).
 
-  **works on touch device only**
+  **works on ios touch device only**
 
   Tip: Avoid to use transition with dragging.
 
