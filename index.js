@@ -33,7 +33,6 @@ module.exports = function PTR(el, opt, fn) {
     var rotate = 0;
     //prevent user scroll when we are loading or scrolling
     if (scrolling || loading) {
-      e.stopImmediatePropagation();
       return e.preventDefault();
     }
     var top = el.scrollTop;
