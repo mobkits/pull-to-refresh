@@ -15,10 +15,12 @@
   bottom: 0px;
   width: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
 }
 
 .ptr_wrap {
+  overflow-x: hidden;
   position: relative;
   min-height: 100%;
   -webkit-transform: translate3d(0, 0, 0);
