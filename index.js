@@ -5,11 +5,19 @@ var Tween = require('tween');
 var raf = require('raf');
 var once = require('once');
 var template = require('./template.html');
-var dom = domify(template);
+var Iscroll = require('iscroll');
 
 var LOADING_TEXT = '加载中...';
 var PULL_TEXT = '下拉刷新';
 var RELEASE_TEXT = '释放更新';
+
+function prepend(parentNode, node) {
+  if (parentNode.firstChild) {
+    parentNode.insertBefore(node, parentNode.firstChild);
+  } else {
+    parentNode.appendChild(node);
+  }
+}
 
 module.exports = function PTR(el, opt, fn) {
   if (!(this instanceof PTR)) return new PTR(el, opt, fn);
@@ -23,93 +31,55 @@ module.exports = function PTR(el, opt, fn) {
   this.timeout = opt.timeout || 10000;
   var start;
   var loading;
-  var scrolling;
-  var wrapper = el.querySelector('.ptr_wrap');
-  wrapper.insertBefore(dom, wrapper.firstElementChild);
-  var img = el.querySelector('.ptr_image');
-  var text = el.querySelector('.ptr_text');
+  prepend(el, domify(template))
+  var imgEl = el.querySelector('.ptr_image');
+  var textEl = el.querySelector('.ptr_text');
+  var iscroll = new Iscroll(el, {
+    handlebar: true,
+    autorefresh: false
+  });
 
-  events.bind(el, 'touchmove', function (e) {
-    var rotate = 0;
-    //prevent user scroll when we are loading or scrolling
-    if (scrolling || loading) {
-      return e.preventDefault();
-    }
-    var top = el.scrollTop;
+  iscroll.on('scroll', function(top) {
+    if (loading) return;
     if (top < 0 && top >= - 40) {
-      text.textContent = this.PULL_TEXT;
+      textEl.textContent = this.PULL_TEXT;
     }
     if (top < -40) {
-      classes(img).add('ptr_rotate');
-      text.textContent = this.RELEASE_TEXT;
-      e.preventDefault();
+      classes(imgEl).add('ptr_rotate');
+      textEl.textContent = this.RELEASE_TEXT;
       start = true;
     } else {
-      classes(img).remove('ptr_rotate');
+      classes(imgEl).remove('ptr_rotate');
       start = false;
     }
-  }.bind(this));
+  }.bind(this))
 
   var self = this;
   function callback() {
+    iscroll.scrollTo(0, 100);
+    iscroll.refresh();
     loading = false;
-    wrapper.style.webkitTransform = 'translateY(0px)';
-    text.textContent = self.PULL_TEXT;
-    img.className = 'ptr_image';
+    textEl.textContent = self.PULL_TEXT;
+    imgEl.className = 'ptr_image';
   }
 
   var refresh = this.refresh = function () {
-      wrapper.style.webkitTransform = 'translateY(40px)';
-      img.className += ' ptr_loading';
-      text.textContent = self.LOADING_TEXT;
+      iscroll.scrollTo(40, 100);
+      imgEl.className += ' ptr_loading';
+      textEl.textContent = self.LOADING_TEXT;
       loading = true;
-      scrollTo(el, 1, function () {
-        var timeout = setTimeout(callback, self.timeout);
-        var cb = once(function () {
-          clearTimeout(timeout);
-          callback();
-        });
-        fn(cb);
+      var timeout = setTimeout(callback, self.timeout);
+      var cb = once(function () {
+        clearTimeout(timeout);
+        callback();
       });
+      fn(cb);
   };
 
-  events.bind(el, 'touchend', function (e) {
+  iscroll.on('release', function () {
     if (start) {
       refresh();
     }
     start = false;
   })
-
-  function scrollTo(el, y, cb) {
-    scrolling = true;
-    var start = {
-      top: el.scrollTop
-    }
-    // setup tween
-    var tween = Tween(start)
-      .ease('out-circ')
-      .to({ top: y})
-      .duration( 1000);
-
-    // scroll
-    tween.update(function(o){
-      el.scrollTop = o.top;
-    });
-
-    // handle end
-    tween.on('end', function(){
-      animate = function(){};
-      tween = null;
-      scrolling = false;
-      cb();
-    });
-
-    // animate
-    function animate() {
-      raf(animate);
-      tween.update();
-    }
-
-    animate();
-  }
 }

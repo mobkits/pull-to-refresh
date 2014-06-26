@@ -10,22 +10,9 @@
 }
 
 .ptr_scrollable {
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-}
-
-.ptr_wrap {
   position: relative;
-  min-height: 100%;
-  -webkit-transform: translate3d(0, 0, 0);
-  -webkit-transform-style: preserve-3d;
-  -webkit-touch-callout: none;
-  user-select: none;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
 }
 
 .ptr_box {

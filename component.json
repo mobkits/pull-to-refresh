@@ -1,12 +1,13 @@
 {
   "name": "pull-to-refresh",
   "description": "pull to refresh",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "keywords": ["pull", "refresh"],
   "templates": [
     "template.html"
   ],
   "dependencies": {
+    "chemzqm/iscroll": "*",
     "component/event": "*",
     "component/domify": "*",
     "component/once": "*",
@@ -16,7 +17,6 @@
   },
   "development": {
     "dependencies": {
-      "chemzqm/scrollfix": "*"
     }
   },
   "license": "MIT",
