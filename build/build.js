@@ -52,6 +52,99 @@ require.define = function (name, exports) {
     exports: exports
   };
 };
+require.register("component~transform-property@0.0.1", Function("exports, module",
+"\n\
+var styles = [\n\
+  'webkitTransform',\n\
+  'MozTransform',\n\
+  'msTransform',\n\
+  'OTransform',\n\
+  'transform'\n\
+];\n\
+\n\
+var el = document.createElement('p');\n\
+var style;\n\
+\n\
+for (var i = 0; i < styles.length; i++) {\n\
+  style = styles[i];\n\
+  if (null != el.style[style]) {\n\
+    module.exports = style;\n\
+    break;\n\
+  }\n\
+}\n\
+\n\
+//# sourceURL=components/component/transform-property/0.0.1/index.js"
+));
+
+require.modules["component-transform-property"] = require.modules["component~transform-property@0.0.1"];
+require.modules["component~transform-property"] = require.modules["component~transform-property@0.0.1"];
+require.modules["transform-property"] = require.modules["component~transform-property@0.0.1"];
+
+
+require.register("component~has-translate3d@0.0.3", Function("exports, module",
+"\n\
+var prop = require(\"component~transform-property@0.0.1\");\n\
+\n\
+// IE <=8 doesn't have `getComputedStyle`\n\
+if (!prop || !window.getComputedStyle) {\n\
+  module.exports = false;\n\
+\n\
+} else {\n\
+  var map = {\n\
+    webkitTransform: '-webkit-transform',\n\
+    OTransform: '-o-transform',\n\
+    msTransform: '-ms-transform',\n\
+    MozTransform: '-moz-transform',\n\
+    transform: 'transform'\n\
+  };\n\
+\n\
+  // from: https://gist.github.com/lorenzopolidori/3794226\n\
+  var el = document.createElement('div');\n\
+  el.style[prop] = 'translate3d(1px,1px,1px)';\n\
+  document.body.insertBefore(el, null);\n\
+  var val = getComputedStyle(el).getPropertyValue(map[prop]);\n\
+  document.body.removeChild(el);\n\
+  module.exports = null != val && val.length && 'none' != val;\n\
+}\n\
+\n\
+//# sourceURL=components/component/has-translate3d/0.0.3/index.js"
+));
+
+require.modules["component-has-translate3d"] = require.modules["component~has-translate3d@0.0.3"];
+require.modules["component~has-translate3d"] = require.modules["component~has-translate3d@0.0.3"];
+require.modules["has-translate3d"] = require.modules["component~has-translate3d@0.0.3"];
+
+
+require.register("component~touchaction-property@0.0.1", Function("exports, module",
+"\n\
+/**\n\
+ * Module exports.\n\
+ */\n\
+\n\
+module.exports = touchActionProperty();\n\
+\n\
+/**\n\
+ * Returns \"touchAction\", \"msTouchAction\", or null.\n\
+ */\n\
+\n\
+function touchActionProperty(doc) {\n\
+  if (!doc) doc = document;\n\
+  var div = doc.createElement('div');\n\
+  var prop = null;\n\
+  if ('touchAction' in div.style) prop = 'touchAction';\n\
+  else if ('msTouchAction' in div.style) prop = 'msTouchAction';\n\
+  div = null;\n\
+  return prop;\n\
+}\n\
+\n\
+//# sourceURL=components/component/touchaction-property/0.0.1/index.js"
+));
+
+require.modules["component-touchaction-property"] = require.modules["component~touchaction-property@0.0.1"];
+require.modules["component~touchaction-property"] = require.modules["component~touchaction-property@0.0.1"];
+require.modules["touchaction-property"] = require.modules["component~touchaction-property@0.0.1"];
+
+
 require.register("component~event@0.1.3", Function("exports, module",
 "var bind = window.addEventListener ? 'addEventListener' : 'attachEvent',\n\
     unbind = window.removeEventListener ? 'removeEventListener' : 'detachEvent',\n\
@@ -96,152 +189,400 @@ require.modules["component~event"] = require.modules["component~event@0.1.3"];
 require.modules["event"] = require.modules["component~event@0.1.3"];
 
 
-require.register("component~domify@1.2.2", Function("exports, module",
-"\n\
-/**\n\
- * Expose `parse`.\n\
- */\n\
-\n\
-module.exports = parse;\n\
+require.register("component~event@0.1.4", Function("exports, module",
+"var bind = window.addEventListener ? 'addEventListener' : 'attachEvent',\n\
+    unbind = window.removeEventListener ? 'removeEventListener' : 'detachEvent',\n\
+    prefix = bind !== 'addEventListener' ? 'on' : '';\n\
 \n\
 /**\n\
- * Wrap map from jquery.\n\
- */\n\
-\n\
-var map = {\n\
-  legend: [1, '<fieldset>', '</fieldset>'],\n\
-  tr: [2, '<table><tbody>', '</tbody></table>'],\n\
-  col: [2, '<table><tbody></tbody><colgroup>', '</colgroup></table>'],\n\
-  _default: [0, '', '']\n\
-};\n\
-\n\
-map.td =\n\
-map.th = [3, '<table><tbody><tr>', '</tr></tbody></table>'];\n\
-\n\
-map.option =\n\
-map.optgroup = [1, '<select multiple=\"multiple\">', '</select>'];\n\
-\n\
-map.thead =\n\
-map.tbody =\n\
-map.colgroup =\n\
-map.caption =\n\
-map.tfoot = [1, '<table>', '</table>'];\n\
-\n\
-map.text =\n\
-map.circle =\n\
-map.ellipse =\n\
-map.line =\n\
-map.path =\n\
-map.polygon =\n\
-map.polyline =\n\
-map.rect = [1, '<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">','</svg>'];\n\
-\n\
-/**\n\
- * Parse `html` and return the children.\n\
+ * Bind `el` event `type` to `fn`.\n\
  *\n\
- * @param {String} html\n\
- * @return {Array}\n\
- * @api private\n\
- */\n\
-\n\
-function parse(html) {\n\
-  if ('string' != typeof html) throw new TypeError('String expected');\n\
-  \n\
-  // tag name\n\
-  var m = /<([\\w:]+)/.exec(html);\n\
-  if (!m) return document.createTextNode(html);\n\
-\n\
-  html = html.replace(/^\\s+|\\s+$/g, ''); // Remove leading/trailing whitespace\n\
-\n\
-  var tag = m[1];\n\
-\n\
-  // body support\n\
-  if (tag == 'body') {\n\
-    var el = document.createElement('html');\n\
-    el.innerHTML = html;\n\
-    return el.removeChild(el.lastChild);\n\
-  }\n\
-\n\
-  // wrap map\n\
-  var wrap = map[tag] || map._default;\n\
-  var depth = wrap[0];\n\
-  var prefix = wrap[1];\n\
-  var suffix = wrap[2];\n\
-  var el = document.createElement('div');\n\
-  el.innerHTML = prefix + html + suffix;\n\
-  while (depth--) el = el.lastChild;\n\
-\n\
-  // one element\n\
-  if (el.firstChild == el.lastChild) {\n\
-    return el.removeChild(el.firstChild);\n\
-  }\n\
-\n\
-  // several elements\n\
-  var fragment = document.createDocumentFragment();\n\
-  while (el.firstChild) {\n\
-    fragment.appendChild(el.removeChild(el.firstChild));\n\
-  }\n\
-\n\
-  return fragment;\n\
-}\n\
-\n\
-//# sourceURL=components/component/domify/1.2.2/index.js"
-));
-
-require.modules["component-domify"] = require.modules["component~domify@1.2.2"];
-require.modules["component~domify"] = require.modules["component~domify@1.2.2"];
-require.modules["domify"] = require.modules["component~domify@1.2.2"];
-
-
-require.register("component~once@0.0.1", Function("exports, module",
-"\n\
-/**\n\
- * Identifier.\n\
- */\n\
-\n\
-var n = 0;\n\
-\n\
-/**\n\
- * Global.\n\
- */\n\
-\n\
-var global = (function(){ return this })();\n\
-\n\
-/**\n\
- * Make `fn` callable only once.\n\
- *\n\
+ * @param {Element} el\n\
+ * @param {String} type\n\
  * @param {Function} fn\n\
+ * @param {Boolean} capture\n\
  * @return {Function}\n\
  * @api public\n\
  */\n\
 \n\
-module.exports = function(fn) {\n\
-  var id = n++;\n\
-\n\
-  function once(){\n\
-    // no receiver\n\
-    if (this == global) {\n\
-      if (once.called) return;\n\
-      once.called = true;\n\
-      return fn.apply(this, arguments);\n\
-    }\n\
-\n\
-    // receiver\n\
-    var key = '__called_' + id + '__';\n\
-    if (this[key]) return;\n\
-    this[key] = true;\n\
-    return fn.apply(this, arguments);\n\
-  }\n\
-\n\
-  return once;\n\
+exports.bind = function(el, type, fn, capture){\n\
+  el[bind](prefix + type, fn, capture || false);\n\
+  return fn;\n\
 };\n\
 \n\
-//# sourceURL=components/component/once/0.0.1/index.js"
+/**\n\
+ * Unbind `el` event `type`'s callback `fn`.\n\
+ *\n\
+ * @param {Element} el\n\
+ * @param {String} type\n\
+ * @param {Function} fn\n\
+ * @param {Boolean} capture\n\
+ * @return {Function}\n\
+ * @api public\n\
+ */\n\
+\n\
+exports.unbind = function(el, type, fn, capture){\n\
+  el[unbind](prefix + type, fn, capture || false);\n\
+  return fn;\n\
+};\n\
+//# sourceURL=components/component/event/0.1.4/index.js"
 ));
 
-require.modules["component-once"] = require.modules["component~once@0.0.1"];
-require.modules["component~once"] = require.modules["component~once@0.0.1"];
-require.modules["once"] = require.modules["component~once@0.0.1"];
+require.modules["component-event"] = require.modules["component~event@0.1.4"];
+require.modules["component~event"] = require.modules["component~event@0.1.4"];
+require.modules["event"] = require.modules["component~event@0.1.4"];
+
+
+require.register("component~query@0.0.3", Function("exports, module",
+"function one(selector, el) {\n\
+  return el.querySelector(selector);\n\
+}\n\
+\n\
+exports = module.exports = function(selector, el){\n\
+  el = el || document;\n\
+  return one(selector, el);\n\
+};\n\
+\n\
+exports.all = function(selector, el){\n\
+  el = el || document;\n\
+  return el.querySelectorAll(selector);\n\
+};\n\
+\n\
+exports.engine = function(obj){\n\
+  if (!obj.one) throw new Error('.one callback required');\n\
+  if (!obj.all) throw new Error('.all callback required');\n\
+  one = obj.one;\n\
+  exports.all = obj.all;\n\
+  return exports;\n\
+};\n\
+\n\
+//# sourceURL=components/component/query/0.0.3/index.js"
+));
+
+require.modules["component-query"] = require.modules["component~query@0.0.3"];
+require.modules["component~query"] = require.modules["component~query@0.0.3"];
+require.modules["query"] = require.modules["component~query@0.0.3"];
+
+
+require.register("component~matches-selector@0.1.2", Function("exports, module",
+"/**\n\
+ * Module dependencies.\n\
+ */\n\
+\n\
+var query = require(\"component~query@0.0.3\");\n\
+\n\
+/**\n\
+ * Element prototype.\n\
+ */\n\
+\n\
+var proto = Element.prototype;\n\
+\n\
+/**\n\
+ * Vendor function.\n\
+ */\n\
+\n\
+var vendor = proto.matches\n\
+  || proto.webkitMatchesSelector\n\
+  || proto.mozMatchesSelector\n\
+  || proto.msMatchesSelector\n\
+  || proto.oMatchesSelector;\n\
+\n\
+/**\n\
+ * Expose `match()`.\n\
+ */\n\
+\n\
+module.exports = match;\n\
+\n\
+/**\n\
+ * Match `el` to `selector`.\n\
+ *\n\
+ * @param {Element} el\n\
+ * @param {String} selector\n\
+ * @return {Boolean}\n\
+ * @api public\n\
+ */\n\
+\n\
+function match(el, selector) {\n\
+  if (vendor) return vendor.call(el, selector);\n\
+  var nodes = query.all(selector, el.parentNode);\n\
+  for (var i = 0; i < nodes.length; ++i) {\n\
+    if (nodes[i] == el) return true;\n\
+  }\n\
+  return false;\n\
+}\n\
+\n\
+//# sourceURL=components/component/matches-selector/0.1.2/index.js"
+));
+
+require.modules["component-matches-selector"] = require.modules["component~matches-selector@0.1.2"];
+require.modules["component~matches-selector"] = require.modules["component~matches-selector@0.1.2"];
+require.modules["matches-selector"] = require.modules["component~matches-selector@0.1.2"];
+
+
+require.register("discore~closest@0.1.2", Function("exports, module",
+"var matches = require(\"component~matches-selector@0.1.2\")\n\
+\n\
+module.exports = function (element, selector, checkYoSelf, root) {\n\
+  element = checkYoSelf ? {parentNode: element} : element\n\
+\n\
+  root = root || document\n\
+\n\
+  // Make sure `element !== document` and `element != null`\n\
+  // otherwise we get an illegal invocation\n\
+  while ((element = element.parentNode) && element !== document) {\n\
+    if (matches(element, selector))\n\
+      return element\n\
+    // After `matches` on the edge case that\n\
+    // the selector matches the root\n\
+    // (when the root is not the document)\n\
+    if (element === root)\n\
+      return  \n\
+  }\n\
+}\n\
+//# sourceURL=components/discore/closest/0.1.2/index.js"
+));
+
+require.modules["discore-closest"] = require.modules["discore~closest@0.1.2"];
+require.modules["discore~closest"] = require.modules["discore~closest@0.1.2"];
+require.modules["closest"] = require.modules["discore~closest@0.1.2"];
+
+
+require.register("component~delegate@0.2.2", Function("exports, module",
+"/**\n\
+ * Module dependencies.\n\
+ */\n\
+\n\
+var closest = require(\"discore~closest@0.1.2\")\n\
+  , event = require(\"component~event@0.1.4\");\n\
+\n\
+/**\n\
+ * Delegate event `type` to `selector`\n\
+ * and invoke `fn(e)`. A callback function\n\
+ * is returned which may be passed to `.unbind()`.\n\
+ *\n\
+ * @param {Element} el\n\
+ * @param {String} selector\n\
+ * @param {String} type\n\
+ * @param {Function} fn\n\
+ * @param {Boolean} capture\n\
+ * @return {Function}\n\
+ * @api public\n\
+ */\n\
+\n\
+exports.bind = function(el, selector, type, fn, capture){\n\
+  return event.bind(el, type, function(e){\n\
+    var target = e.target || e.srcElement;\n\
+    e.delegateTarget = closest(target, selector, true, el);\n\
+    if (e.delegateTarget) fn.call(el, e);\n\
+  }, capture);\n\
+};\n\
+\n\
+/**\n\
+ * Unbind event `type`'s callback `fn`.\n\
+ *\n\
+ * @param {Element} el\n\
+ * @param {String} type\n\
+ * @param {Function} fn\n\
+ * @param {Boolean} capture\n\
+ * @api public\n\
+ */\n\
+\n\
+exports.unbind = function(el, type, fn, capture){\n\
+  event.unbind(el, type, fn, capture);\n\
+};\n\
+\n\
+//# sourceURL=components/component/delegate/0.2.2/index.js"
+));
+
+require.modules["component-delegate"] = require.modules["component~delegate@0.2.2"];
+require.modules["component~delegate"] = require.modules["component~delegate@0.2.2"];
+require.modules["delegate"] = require.modules["component~delegate@0.2.2"];
+
+
+require.register("component~events@1.0.7", Function("exports, module",
+"\n\
+/**\n\
+ * Module dependencies.\n\
+ */\n\
+\n\
+var events = require(\"component~event@0.1.3\");\n\
+var delegate = require(\"component~delegate@0.2.2\");\n\
+\n\
+/**\n\
+ * Expose `Events`.\n\
+ */\n\
+\n\
+module.exports = Events;\n\
+\n\
+/**\n\
+ * Initialize an `Events` with the given\n\
+ * `el` object which events will be bound to,\n\
+ * and the `obj` which will receive method calls.\n\
+ *\n\
+ * @param {Object} el\n\
+ * @param {Object} obj\n\
+ * @api public\n\
+ */\n\
+\n\
+function Events(el, obj) {\n\
+  if (!(this instanceof Events)) return new Events(el, obj);\n\
+  if (!el) throw new Error('element required');\n\
+  if (!obj) throw new Error('object required');\n\
+  this.el = el;\n\
+  this.obj = obj;\n\
+  this._events = {};\n\
+}\n\
+\n\
+/**\n\
+ * Subscription helper.\n\
+ */\n\
+\n\
+Events.prototype.sub = function(event, method, cb){\n\
+  this._events[event] = this._events[event] || {};\n\
+  this._events[event][method] = cb;\n\
+};\n\
+\n\
+/**\n\
+ * Bind to `event` with optional `method` name.\n\
+ * When `method` is undefined it becomes `event`\n\
+ * with the \"on\" prefix.\n\
+ *\n\
+ * Examples:\n\
+ *\n\
+ *  Direct event handling:\n\
+ *\n\
+ *    events.bind('click') // implies \"onclick\"\n\
+ *    events.bind('click', 'remove')\n\
+ *    events.bind('click', 'sort', 'asc')\n\
+ *\n\
+ *  Delegated event handling:\n\
+ *\n\
+ *    events.bind('click li > a')\n\
+ *    events.bind('click li > a', 'remove')\n\
+ *    events.bind('click a.sort-ascending', 'sort', 'asc')\n\
+ *    events.bind('click a.sort-descending', 'sort', 'desc')\n\
+ *\n\
+ * @param {String} event\n\
+ * @param {String|function} [method]\n\
+ * @return {Function} callback\n\
+ * @api public\n\
+ */\n\
+\n\
+Events.prototype.bind = function(event, method){\n\
+  var e = parse(event);\n\
+  var el = this.el;\n\
+  var obj = this.obj;\n\
+  var name = e.name;\n\
+  var method = method || 'on' + name;\n\
+  var args = [].slice.call(arguments, 2);\n\
+\n\
+  // callback\n\
+  function cb(){\n\
+    var a = [].slice.call(arguments).concat(args);\n\
+    obj[method].apply(obj, a);\n\
+  }\n\
+\n\
+  // bind\n\
+  if (e.selector) {\n\
+    cb = delegate.bind(el, e.selector, name, cb);\n\
+  } else {\n\
+    events.bind(el, name, cb);\n\
+  }\n\
+\n\
+  // subscription for unbinding\n\
+  this.sub(name, method, cb);\n\
+\n\
+  return cb;\n\
+};\n\
+\n\
+/**\n\
+ * Unbind a single binding, all bindings for `event`,\n\
+ * or all bindings within the manager.\n\
+ *\n\
+ * Examples:\n\
+ *\n\
+ *  Unbind direct handlers:\n\
+ *\n\
+ *     events.unbind('click', 'remove')\n\
+ *     events.unbind('click')\n\
+ *     events.unbind()\n\
+ *\n\
+ * Unbind delegate handlers:\n\
+ *\n\
+ *     events.unbind('click', 'remove')\n\
+ *     events.unbind('click')\n\
+ *     events.unbind()\n\
+ *\n\
+ * @param {String|Function} [event]\n\
+ * @param {String|Function} [method]\n\
+ * @api public\n\
+ */\n\
+\n\
+Events.prototype.unbind = function(event, method){\n\
+  if (0 == arguments.length) return this.unbindAll();\n\
+  if (1 == arguments.length) return this.unbindAllOf(event);\n\
+\n\
+  // no bindings for this event\n\
+  var bindings = this._events[event];\n\
+  if (!bindings) return;\n\
+\n\
+  // no bindings for this method\n\
+  var cb = bindings[method];\n\
+  if (!cb) return;\n\
+\n\
+  events.unbind(this.el, event, cb);\n\
+};\n\
+\n\
+/**\n\
+ * Unbind all events.\n\
+ *\n\
+ * @api private\n\
+ */\n\
+\n\
+Events.prototype.unbindAll = function(){\n\
+  for (var event in this._events) {\n\
+    this.unbindAllOf(event);\n\
+  }\n\
+};\n\
+\n\
+/**\n\
+ * Unbind all events for `event`.\n\
+ *\n\
+ * @param {String} event\n\
+ * @api private\n\
+ */\n\
+\n\
+Events.prototype.unbindAllOf = function(event){\n\
+  var bindings = this._events[event];\n\
+  if (!bindings) return;\n\
+\n\
+  for (var method in bindings) {\n\
+    this.unbind(event, method);\n\
+  }\n\
+};\n\
+\n\
+/**\n\
+ * Parse `event`.\n\
+ *\n\
+ * @param {String} event\n\
+ * @return {Object}\n\
+ * @api private\n\
+ */\n\
+\n\
+function parse(event) {\n\
+  var parts = event.split(/ +/);\n\
+  return {\n\
+    name: parts.shift(),\n\
+    selector: parts.join(' ')\n\
+  }\n\
+}\n\
+\n\
+//# sourceURL=components/component/events/1.0.7/index.js"
+));
+
+require.modules["component-events"] = require.modules["component~events@1.0.7"];
+require.modules["component~events"] = require.modules["component~events@1.0.7"];
+require.modules["events"] = require.modules["component~events@1.0.7"];
 
 
 require.register("component~raf@1.1.3", Function("exports, module",
@@ -456,6 +797,180 @@ Emitter.prototype.hasListeners = function(event){\n\
 require.modules["component-emitter"] = require.modules["component~emitter@1.0.0"];
 require.modules["component~emitter"] = require.modules["component~emitter@1.0.0"];
 require.modules["emitter"] = require.modules["component~emitter@1.0.0"];
+
+
+require.register("component~emitter@1.1.3", Function("exports, module",
+"\n\
+/**\n\
+ * Expose `Emitter`.\n\
+ */\n\
+\n\
+module.exports = Emitter;\n\
+\n\
+/**\n\
+ * Initialize a new `Emitter`.\n\
+ *\n\
+ * @api public\n\
+ */\n\
+\n\
+function Emitter(obj) {\n\
+  if (obj) return mixin(obj);\n\
+};\n\
+\n\
+/**\n\
+ * Mixin the emitter properties.\n\
+ *\n\
+ * @param {Object} obj\n\
+ * @return {Object}\n\
+ * @api private\n\
+ */\n\
+\n\
+function mixin(obj) {\n\
+  for (var key in Emitter.prototype) {\n\
+    obj[key] = Emitter.prototype[key];\n\
+  }\n\
+  return obj;\n\
+}\n\
+\n\
+/**\n\
+ * Listen on the given `event` with `fn`.\n\
+ *\n\
+ * @param {String} event\n\
+ * @param {Function} fn\n\
+ * @return {Emitter}\n\
+ * @api public\n\
+ */\n\
+\n\
+Emitter.prototype.on =\n\
+Emitter.prototype.addEventListener = function(event, fn){\n\
+  this._callbacks = this._callbacks || {};\n\
+  (this._callbacks[event] = this._callbacks[event] || [])\n\
+    .push(fn);\n\
+  return this;\n\
+};\n\
+\n\
+/**\n\
+ * Adds an `event` listener that will be invoked a single\n\
+ * time then automatically removed.\n\
+ *\n\
+ * @param {String} event\n\
+ * @param {Function} fn\n\
+ * @return {Emitter}\n\
+ * @api public\n\
+ */\n\
+\n\
+Emitter.prototype.once = function(event, fn){\n\
+  var self = this;\n\
+  this._callbacks = this._callbacks || {};\n\
+\n\
+  function on() {\n\
+    self.off(event, on);\n\
+    fn.apply(this, arguments);\n\
+  }\n\
+\n\
+  on.fn = fn;\n\
+  this.on(event, on);\n\
+  return this;\n\
+};\n\
+\n\
+/**\n\
+ * Remove the given callback for `event` or all\n\
+ * registered callbacks.\n\
+ *\n\
+ * @param {String} event\n\
+ * @param {Function} fn\n\
+ * @return {Emitter}\n\
+ * @api public\n\
+ */\n\
+\n\
+Emitter.prototype.off =\n\
+Emitter.prototype.removeListener =\n\
+Emitter.prototype.removeAllListeners =\n\
+Emitter.prototype.removeEventListener = function(event, fn){\n\
+  this._callbacks = this._callbacks || {};\n\
+\n\
+  // all\n\
+  if (0 == arguments.length) {\n\
+    this._callbacks = {};\n\
+    return this;\n\
+  }\n\
+\n\
+  // specific event\n\
+  var callbacks = this._callbacks[event];\n\
+  if (!callbacks) return this;\n\
+\n\
+  // remove all handlers\n\
+  if (1 == arguments.length) {\n\
+    delete this._callbacks[event];\n\
+    return this;\n\
+  }\n\
+\n\
+  // remove specific handler\n\
+  var cb;\n\
+  for (var i = 0; i < callbacks.length; i++) {\n\
+    cb = callbacks[i];\n\
+    if (cb === fn || cb.fn === fn) {\n\
+      callbacks.splice(i, 1);\n\
+      break;\n\
+    }\n\
+  }\n\
+  return this;\n\
+};\n\
+\n\
+/**\n\
+ * Emit `event` with the given args.\n\
+ *\n\
+ * @param {String} event\n\
+ * @param {Mixed} ...\n\
+ * @return {Emitter}\n\
+ */\n\
+\n\
+Emitter.prototype.emit = function(event){\n\
+  this._callbacks = this._callbacks || {};\n\
+  var args = [].slice.call(arguments, 1)\n\
+    , callbacks = this._callbacks[event];\n\
+\n\
+  if (callbacks) {\n\
+    callbacks = callbacks.slice(0);\n\
+    for (var i = 0, len = callbacks.length; i < len; ++i) {\n\
+      callbacks[i].apply(this, args);\n\
+    }\n\
+  }\n\
+\n\
+  return this;\n\
+};\n\
+\n\
+/**\n\
+ * Return array of callbacks for `event`.\n\
+ *\n\
+ * @param {String} event\n\
+ * @return {Array}\n\
+ * @api public\n\
+ */\n\
+\n\
+Emitter.prototype.listeners = function(event){\n\
+  this._callbacks = this._callbacks || {};\n\
+  return this._callbacks[event] || [];\n\
+};\n\
+\n\
+/**\n\
+ * Check if this emitter has `event` handlers.\n\
+ *\n\
+ * @param {String} event\n\
+ * @return {Boolean}\n\
+ * @api public\n\
+ */\n\
+\n\
+Emitter.prototype.hasListeners = function(event){\n\
+  return !! this.listeners(event).length;\n\
+};\n\
+\n\
+//# sourceURL=components/component/emitter/1.1.3/index.js"
+));
+
+require.modules["component-emitter"] = require.modules["component~emitter@1.1.3"];
+require.modules["component~emitter"] = require.modules["component~emitter@1.1.3"];
+require.modules["emitter"] = require.modules["component~emitter@1.1.3"];
 
 
 require.register("component~ease@1.0.0", Function("exports, module",
@@ -835,6 +1350,526 @@ require.modules["component~tween"] = require.modules["component~tween@1.1.0"];
 require.modules["tween"] = require.modules["component~tween@1.1.0"];
 
 
+require.register("chemzqm~computed-style@0.1.1", Function("exports, module",
+"\n\
+/**\n\
+ * Get the computed style of a DOM element\n\
+ * \n\
+ *   style(document.body) // => {width:'500px', ...}\n\
+ * \n\
+ * @param {Element} element\n\
+ * @return {Object}\n\
+ */\n\
+\n\
+// Accessing via window for jsDOM support\n\
+module.exports = window.getComputedStyle\n\
+\n\
+// Fallback to elem.currentStyle for IE < 9\n\
+if (!module.exports) {\n\
+\tmodule.exports = function (elem) {\n\
+\t\treturn elem.currentStyle\n\
+\t}\n\
+}\n\
+\n\
+//# sourceURL=components/chemzqm/computed-style/0.1.1/index.js"
+));
+
+require.modules["chemzqm-computed-style"] = require.modules["chemzqm~computed-style@0.1.1"];
+require.modules["chemzqm~computed-style"] = require.modules["chemzqm~computed-style@0.1.1"];
+require.modules["computed-style"] = require.modules["chemzqm~computed-style@0.1.1"];
+
+
+require.register("chemzqm~iscroll@0.1.3", Function("exports, module",
+"var has3d = require(\"component~has-translate3d@0.0.3\");\n\
+var touchAction = require(\"component~touchaction-property@0.0.1\");\n\
+var events = require(\"component~events@1.0.7\");\n\
+var styles = require(\"chemzqm~computed-style@0.1.1\");\n\
+var transform = require(\"component~transform-property@0.0.1\");\n\
+var Emitter = require(\"component~emitter@1.1.3\");\n\
+var raf = require(\"component~raf@1.1.3\");\n\
+var Tween = require(\"component~tween@1.1.0\");\n\
+var max = Math.max;\n\
+var min = Math.min;\n\
+var now = Date.now || function () {\n\
+  return (new Date()).getTime();\n\
+}\n\
+var getterAndSetter = (typeof Object.__defineGetter__ === 'function' && typeof Object.__defineSetter__ === 'function');\n\
+\n\
+function lastVisible(el) {\n\
+  var nodes = el.childNodes;\n\
+  for(var i = nodes.length - 1; i >=0; i --) {\n\
+    var node = nodes[i];\n\
+    if (node.nodeType === 1 && node.style.display !== 'none') {\n\
+      return node;\n\
+    }\n\
+  }\n\
+}\n\
+\n\
+\n\
+function Iscroll(el, opts) {\n\
+  if (! (this instanceof Iscroll)) return new Iscroll(el, opts);\n\
+  this.y = 0;\n\
+  this.el = el;\n\
+  this.pb = parseInt(styles(el).getPropertyValue('padding-bottom'), 10);\n\
+  this.touchAction('none');\n\
+  this.refresh();\n\
+  this.bind();\n\
+  var self = this;\n\
+  if (getterAndSetter) {\n\
+    this.__defineGetter__('scrollTop', function(){\n\
+      return - self.y;\n\
+    })\n\
+    this.__defineSetter__('scrollTop', function(v){\n\
+      return self.scrollTo(v, 200);\n\
+    })\n\
+  }\n\
+  this.autorefresh = opts.autorefresh === undefined ? true : opts.autorefresh;\n\
+  opts = opts || {};\n\
+  if (opts.handlebar) {\n\
+    var bar = this.handlebar = document.createElement('div');\n\
+    bar.className = 'iscroll-handlebar';\n\
+    this.el.parentNode.appendChild(bar);\n\
+  }\n\
+}\n\
+\n\
+Emitter(Iscroll.prototype);\n\
+\n\
+Iscroll.prototype.bind = function () {\n\
+  this.events = events(this.el, this);\n\
+  this.docEvents = events(document, this);\n\
+\n\
+   // W3C touch events\n\
+  this.events.bind('touchstart');\n\
+  this.events.bind('touchmove');\n\
+  this.docEvents.bind('touchend');\n\
+}\n\
+\n\
+/**\n\
+ * recalculate height\n\
+ *\n\
+ * @api public\n\
+ */\n\
+Iscroll.prototype.refresh = function () {\n\
+  var child = lastVisible(this.el);\n\
+  this.viewHeight = parseInt(styles(this.el.parentNode).height, 10);\n\
+  var cb = child.getBoundingClientRect().bottom;\n\
+  var b = this.el.getBoundingClientRect().bottom;\n\
+  var h = parseInt(styles(this.el).height, 10);\n\
+  if (b - cb !== 0) {\n\
+    this.height = h + (cb - b) + this.pb;\n\
+  } else {\n\
+    this.height = h + this.pb;\n\
+  }\n\
+  this.el.style.height = this.height + 'px';\n\
+}\n\
+\n\
+Iscroll.prototype.unbind = function () {\n\
+  this.events.unbind();\n\
+  this.docEvents.unbind();\n\
+}\n\
+\n\
+Iscroll.prototype.restrict = function (y) {\n\
+  y = min(y , 80);\n\
+  y = max(y , this.viewHeight - this.height - 80);\n\
+  return y;\n\
+}\n\
+\n\
+Iscroll.prototype.ontouchstart = function (e) {\n\
+  this.speed = null;\n\
+  if (this.tween) this.tween.stop();\n\
+  if (this.autorefresh) this.refresh();\n\
+  this.dy = 0;\n\
+  this.ts = now();\n\
+  this.leftright = null;\n\
+  if (this.handlebar) this.resizeHandlebar();\n\
+\n\
+  var touch = this.getTouch(e);\n\
+  this.pageY = touch.pageY;\n\
+  this.down = {\n\
+    x: touch.pageX,\n\
+    y: touch.pageY,\n\
+    start: this.y,\n\
+    at: now()\n\
+  };\n\
+}\n\
+\n\
+Iscroll.prototype.ontouchmove = function (e) {\n\
+  e.preventDefault();\n\
+  if (!this.down || this.leftright) return;\n\
+  var touch = this.getTouch(e);\n\
+  // TODO: ignore more than one finger\n\
+  if (!touch) {\n\
+    return;\n\
+  }\n\
+\n\
+  var down = this.down;\n\
+  var y = touch.pageY;\n\
+  this.dy = y - down.y;\n\
+\n\
+  // determine dy and the slope\n\
+  if (null == this.leftright) {\n\
+    var x = touch.pageX;\n\
+    var dx = x - down.x;\n\
+    var slope = dx / this.dy;\n\
+\n\
+    // if is greater than 1 or -1, we're swiping up/down\n\
+    if (slope > 1 || slope < -1) {\n\
+      this.leftright = true;\n\
+      if (this.handlebar) this.hideHandlebar();\n\
+      return;\n\
+    } else {\n\
+      this.leftright = false;\n\
+    }\n\
+  }\n\
+\n\
+  //calculate speed every 100 milisecond\n\
+  this.calcuteSpeed(y);\n\
+  var start = this.down.start;\n\
+  var dest = this.restrict(start + this.dy);\n\
+  this.translate(dest);\n\
+}\n\
+\n\
+Iscroll.prototype.calcuteSpeed = function (y) {\n\
+  var ts = now();\n\
+  this.ts = this.ts || this.down.at;\n\
+  this.pageY = (this.pageY == null) ? this.down.y : this.pageY;\n\
+  var dt = ts - this.ts;\n\
+  if (ts - this.down.at < 100) {\n\
+    this.distance = y - this.pageY;\n\
+    this.speed = Math.abs(this.distance/dt);\n\
+  } else if(dt > 50){\n\
+    this.distance = y - this.pageY;\n\
+    this.speed = Math.abs(this.distance/dt);\n\
+    this.ts = ts;\n\
+    this.pageY = y;\n\
+  }\n\
+}\n\
+\n\
+Iscroll.prototype.ontouchend = function (e) {\n\
+  if (!this.down || this.leftright) return;\n\
+  var touch = this.getTouch(e);\n\
+  this.calcuteSpeed(touch.pageY);\n\
+  var m = this.momentum();\n\
+  this.scrollTo(m.dest, m.duration, m.ease);\n\
+  this.emit('release', this.y);\n\
+  this.down = null;\n\
+}\n\
+\n\
+Iscroll.prototype.momentum = function () {\n\
+  var deceleration = 0.0005;\n\
+  var speed = this.speed;\n\
+  speed = min(speed, 1.1);\n\
+  var destination = this.y + ( speed * speed ) / ( 2 * deceleration ) * ( this.distance < 0 ? -1 : 1 );\n\
+  var duration = speed / deceleration;\n\
+  var newY, ease;\n\
+  if (destination > 0) {\n\
+    newY = 0;\n\
+    ease = 'out-back';\n\
+  } else if (destination < this.viewHeight - this.height) {\n\
+    newY = this.viewHeight - this.height;\n\
+    ease = 'out-back';\n\
+  }\n\
+  if (typeof newY === 'number') {\n\
+    duration = duration*(newY - this.y + 160)/(destination - this.y);\n\
+    destination = newY;\n\
+  }\n\
+  if (this.y > 0 || this.y < this.viewHeight - this.height) {\n\
+    duration = 500;\n\
+    ease = 'out-circ';\n\
+  }\n\
+  return {\n\
+    dest: destination,\n\
+    duration: duration,\n\
+    ease: ease\n\
+  }\n\
+}\n\
+\n\
+\n\
+Iscroll.prototype.scrollTo = function (y, duration, easing) {\n\
+  if (this.tween) this.tween.stop();\n\
+  var intransition = (duration > 0 && y !== this.y);\n\
+  if (!intransition) {\n\
+    this.onScrollEnd();\n\
+    return this.translate(y);\n\
+  }\n\
+\n\
+  easing = easing || 'out-circ';\n\
+  var tween = this.tween = Tween({y : this.y})\n\
+      .ease(easing)\n\
+      .to({y: y})\n\
+      .duration(duration)\n\
+\n\
+  var self = this;\n\
+  tween.update(function(o) {\n\
+    self.translate(o.y);\n\
+  })\n\
+\n\
+  tween.on('end', function () {\n\
+    animate = function(){};\n\
+    if (!tween.stopped) {\n\
+      self.onScrollEnd();\n\
+    }\n\
+  })\n\
+\n\
+  function animate() {\n\
+    raf(animate);\n\
+    tween.update();\n\
+  }\n\
+\n\
+  animate();\n\
+}\n\
+\n\
+Iscroll.prototype.onScrollEnd = function () {\n\
+  this.hideHandlebar();\n\
+  var top = this.y === 0;\n\
+  var bottom = this.y === (this.viewHeight - this.height);\n\
+  this.emit('scrollend', {\n\
+    top: top,\n\
+    bottom: bottom\n\
+  })\n\
+}\n\
+\n\
+/**\n\
+ * Gets the appropriate \"touch\" object for the `e` event. The event may be from\n\
+ * a \"mouse\", \"touch\", or \"Pointer\" event, so the normalization happens here.\n\
+ *\n\
+ * @api private\n\
+ */\n\
+\n\
+Iscroll.prototype.getTouch = function(e){\n\
+  // \"mouse\" and \"Pointer\" events just use the event object itself\n\
+  var touch = e;\n\
+  if (e.changedTouches && e.changedTouches.length > 0) {\n\
+    // W3C \"touch\" events use the `changedTouches` array\n\
+    touch = e.changedTouches[0];\n\
+  }\n\
+  return touch;\n\
+}\n\
+\n\
+\n\
+/**\n\
+ * Translate to `x`.\n\
+ *\n\
+ *\n\
+ * @api private\n\
+ */\n\
+\n\
+Iscroll.prototype.translate = function(y) {\n\
+  var s = this.el.style;\n\
+  if (isNaN(y)) return;\n\
+  y = Math.floor(y);\n\
+  //reach the end\n\
+  if (this.y !== y) {\n\
+    this.y = y;\n\
+    this.emit('scroll', - y);\n\
+    if (this.handlebar) this.transformHandlebar();\n\
+  }\n\
+  if (has3d) {\n\
+    s.webkitTransform = 'translate3d(0, ' + y + 'px' + ', 0)';\n\
+  } else {\n\
+    s.webKitTransform = 'translateY(' + y + 'px)';\n\
+  }\n\
+}\n\
+\n\
+/**\n\
+ * Sets the \"touchAction\" CSS style property to `value`.\n\
+ *\n\
+ * @api private\n\
+ */\n\
+\n\
+Iscroll.prototype.touchAction = function(value){\n\
+  var s = this.el.style;\n\
+  if (touchAction) {\n\
+    s[touchAction] = value;\n\
+  }\n\
+}\n\
+\n\
+Iscroll.prototype.transformHandlebar = function(){\n\
+  var vh = this.viewHeight;\n\
+  var h = this.height;\n\
+  var bh = vh - vh * vh/h;\n\
+  var ih = h - vh;\n\
+  var y = parseInt(- bh * this.y/ih);\n\
+  var s = this.handlebar.style;\n\
+  if (has3d) {\n\
+    s.webkitTransform = 'translate3d(0, ' + y + 'px' + ', 0)';\n\
+  } else {\n\
+    s.webKitTransform = 'translateY(' + y + 'px)';\n\
+  }\n\
+}\n\
+\n\
+/**\n\
+ * show the handlebar and size it\n\
+ * @api public\n\
+ */\n\
+Iscroll.prototype.resizeHandlebar = function(){\n\
+  var h = this.viewHeight * this.viewHeight/this.height;\n\
+  this.handlebar.style.height = h + 'px';\n\
+  this.handlebar.style.backgroundColor = 'rgba(0,0,0,0.3)';\n\
+}\n\
+\n\
+Iscroll.prototype.hideHandlebar = function () {\n\
+  if (this.handlebar) this.handlebar.style.backgroundColor = 'transparent';\n\
+}\n\
+\n\
+module.exports = Iscroll;\n\
+\n\
+//# sourceURL=components/chemzqm/iscroll/0.1.3/index.js"
+));
+
+require.modules["chemzqm-iscroll"] = require.modules["chemzqm~iscroll@0.1.3"];
+require.modules["chemzqm~iscroll"] = require.modules["chemzqm~iscroll@0.1.3"];
+require.modules["iscroll"] = require.modules["chemzqm~iscroll@0.1.3"];
+
+
+require.register("component~domify@1.2.2", Function("exports, module",
+"\n\
+/**\n\
+ * Expose `parse`.\n\
+ */\n\
+\n\
+module.exports = parse;\n\
+\n\
+/**\n\
+ * Wrap map from jquery.\n\
+ */\n\
+\n\
+var map = {\n\
+  legend: [1, '<fieldset>', '</fieldset>'],\n\
+  tr: [2, '<table><tbody>', '</tbody></table>'],\n\
+  col: [2, '<table><tbody></tbody><colgroup>', '</colgroup></table>'],\n\
+  _default: [0, '', '']\n\
+};\n\
+\n\
+map.td =\n\
+map.th = [3, '<table><tbody><tr>', '</tr></tbody></table>'];\n\
+\n\
+map.option =\n\
+map.optgroup = [1, '<select multiple=\"multiple\">', '</select>'];\n\
+\n\
+map.thead =\n\
+map.tbody =\n\
+map.colgroup =\n\
+map.caption =\n\
+map.tfoot = [1, '<table>', '</table>'];\n\
+\n\
+map.text =\n\
+map.circle =\n\
+map.ellipse =\n\
+map.line =\n\
+map.path =\n\
+map.polygon =\n\
+map.polyline =\n\
+map.rect = [1, '<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">','</svg>'];\n\
+\n\
+/**\n\
+ * Parse `html` and return the children.\n\
+ *\n\
+ * @param {String} html\n\
+ * @return {Array}\n\
+ * @api private\n\
+ */\n\
+\n\
+function parse(html) {\n\
+  if ('string' != typeof html) throw new TypeError('String expected');\n\
+  \n\
+  // tag name\n\
+  var m = /<([\\w:]+)/.exec(html);\n\
+  if (!m) return document.createTextNode(html);\n\
+\n\
+  html = html.replace(/^\\s+|\\s+$/g, ''); // Remove leading/trailing whitespace\n\
+\n\
+  var tag = m[1];\n\
+\n\
+  // body support\n\
+  if (tag == 'body') {\n\
+    var el = document.createElement('html');\n\
+    el.innerHTML = html;\n\
+    return el.removeChild(el.lastChild);\n\
+  }\n\
+\n\
+  // wrap map\n\
+  var wrap = map[tag] || map._default;\n\
+  var depth = wrap[0];\n\
+  var prefix = wrap[1];\n\
+  var suffix = wrap[2];\n\
+  var el = document.createElement('div');\n\
+  el.innerHTML = prefix + html + suffix;\n\
+  while (depth--) el = el.lastChild;\n\
+\n\
+  // one element\n\
+  if (el.firstChild == el.lastChild) {\n\
+    return el.removeChild(el.firstChild);\n\
+  }\n\
+\n\
+  // several elements\n\
+  var fragment = document.createDocumentFragment();\n\
+  while (el.firstChild) {\n\
+    fragment.appendChild(el.removeChild(el.firstChild));\n\
+  }\n\
+\n\
+  return fragment;\n\
+}\n\
+\n\
+//# sourceURL=components/component/domify/1.2.2/index.js"
+));
+
+require.modules["component-domify"] = require.modules["component~domify@1.2.2"];
+require.modules["component~domify"] = require.modules["component~domify@1.2.2"];
+require.modules["domify"] = require.modules["component~domify@1.2.2"];
+
+
+require.register("component~once@0.0.1", Function("exports, module",
+"\n\
+/**\n\
+ * Identifier.\n\
+ */\n\
+\n\
+var n = 0;\n\
+\n\
+/**\n\
+ * Global.\n\
+ */\n\
+\n\
+var global = (function(){ return this })();\n\
+\n\
+/**\n\
+ * Make `fn` callable only once.\n\
+ *\n\
+ * @param {Function} fn\n\
+ * @return {Function}\n\
+ * @api public\n\
+ */\n\
+\n\
+module.exports = function(fn) {\n\
+  var id = n++;\n\
+\n\
+  function once(){\n\
+    // no receiver\n\
+    if (this == global) {\n\
+      if (once.called) return;\n\
+      once.called = true;\n\
+      return fn.apply(this, arguments);\n\
+    }\n\
+\n\
+    // receiver\n\
+    var key = '__called_' + id + '__';\n\
+    if (this[key]) return;\n\
+    this[key] = true;\n\
+    return fn.apply(this, arguments);\n\
+  }\n\
+\n\
+  return once;\n\
+};\n\
+\n\
+//# sourceURL=components/component/once/0.0.1/index.js"
+));
+
+require.modules["component-once"] = require.modules["component~once@0.0.1"];
+require.modules["component~once"] = require.modules["component~once@0.0.1"];
+require.modules["once"] = require.modules["component~once@0.0.1"];
+
+
 require.register("component~indexof@0.0.3", Function("exports, module",
 "module.exports = function(arr, obj){\n\
   if (arr.indexOf) return arr.indexOf(obj);\n\
@@ -1045,53 +2080,27 @@ require.modules["component~classes"] = require.modules["component~classes@1.2.1"
 require.modules["classes"] = require.modules["component~classes@1.2.1"];
 
 
-require.register("chemzqm~scrollfix@0.0.1", Function("exports, module",
-"\n\
-//not draggable\n\
-document.addEventListener('touchmove', function(e) {\n\
-  e.preventDefault();\n\
-});\n\
-\n\
-module.exports = function (el) {\n\
-  //it could be scrollable;\n\
-  el.addEventListener('touchmove', function(e) {\n\
-    e.stopPropagation();\n\
-  })\n\
-\n\
-  var sy = 0;\n\
-  //prevent dragging at top\n\
-  el.addEventListener('touchstart', function(e) {\n\
-    sy = e.pageY;\n\
-    if (el.scrollTop === 0) {\n\
-      el.scrollTop = 1;\n\
-    } else if (el.scrollHeight == el.scrollTop + el.offsetHeight) {\n\
-      el.scrollTop = el.scrollTop - 1;\n\
-    }\n\
-  })\n\
-\n\
-}\n\
-\n\
-//# sourceURL=components/chemzqm/scrollfix/0.0.1/index.js"
-));
-
-require.modules["chemzqm-scrollfix"] = require.modules["chemzqm~scrollfix@0.0.1"];
-require.modules["chemzqm~scrollfix"] = require.modules["chemzqm~scrollfix@0.0.1"];
-require.modules["scrollfix"] = require.modules["chemzqm~scrollfix@0.0.1"];
-
-
 require.register("pull-to-refresh", Function("exports, module",
-"var events = require(\"component~event@0.1.3\");\n\
+"var events = require(\"component~event@0.1.4\");\n\
 var classes = require(\"component~classes@1.2.1\");\n\
 var domify = require(\"component~domify@1.2.2\");\n\
 var Tween = require(\"component~tween@1.1.0\");\n\
 var raf = require(\"component~raf@1.1.3\");\n\
 var once = require(\"component~once@0.0.1\");\n\
 var template = require(\"pull-to-refresh/template.html\");\n\
-var dom = domify(template);\n\
+var Iscroll = require(\"chemzqm~iscroll@0.1.3\");\n\
 \n\
 var LOADING_TEXT = '加载中...';\n\
 var PULL_TEXT = '下拉刷新';\n\
 var RELEASE_TEXT = '释放更新';\n\
+\n\
+function prepend(parentNode, node) {\n\
+  if (parentNode.firstChild) {\n\
+    parentNode.insertBefore(node, parentNode.firstChild);\n\
+  } else {\n\
+    parentNode.appendChild(node);\n\
+  }\n\
+}\n\
 \n\
 module.exports = function PTR(el, opt, fn) {\n\
   if (!(this instanceof PTR)) return new PTR(el, opt, fn);\n\
@@ -1105,96 +2114,57 @@ module.exports = function PTR(el, opt, fn) {\n\
   this.timeout = opt.timeout || 10000;\n\
   var start;\n\
   var loading;\n\
-  var scrolling;\n\
-  var wrapper = el.querySelector('.ptr_wrap');\n\
-  wrapper.insertBefore(dom, wrapper.firstElementChild);\n\
-  var img = el.querySelector('.ptr_image');\n\
-  var text = el.querySelector('.ptr_text');\n\
+  prepend(el, domify(template))\n\
+  var imgEl = el.querySelector('.ptr_image');\n\
+  var textEl = el.querySelector('.ptr_text');\n\
+  var iscroll = new Iscroll(el, {\n\
+    handlebar: true,\n\
+    autorefresh: false\n\
+  });\n\
 \n\
-  events.bind(el, 'touchmove', function (e) {\n\
-    var rotate = 0;\n\
-    //prevent user scroll when we are loading or scrolling\n\
-    if (scrolling || loading) {\n\
-      e.stopImmediatePropagation();\n\
-      return e.preventDefault();\n\
-    }\n\
-    var top = el.scrollTop;\n\
+  iscroll.on('scroll', function(top) {\n\
+    if (loading) return;\n\
     if (top < 0 && top >= - 40) {\n\
-      text.textContent = this.PULL_TEXT;\n\
+      textEl.textContent = this.PULL_TEXT;\n\
     }\n\
     if (top < -40) {\n\
-      classes(img).add('ptr_rotate');\n\
-      text.textContent = this.RELEASE_TEXT;\n\
-      e.preventDefault();\n\
+      classes(imgEl).add('ptr_rotate');\n\
+      textEl.textContent = this.RELEASE_TEXT;\n\
       start = true;\n\
     } else {\n\
-      classes(img).remove('ptr_rotate');\n\
+      classes(imgEl).remove('ptr_rotate');\n\
       start = false;\n\
     }\n\
-  }.bind(this));\n\
+  }.bind(this))\n\
 \n\
   var self = this;\n\
   function callback() {\n\
+    iscroll.scrollTo(0, 100);\n\
+    iscroll.refresh();\n\
     loading = false;\n\
-    wrapper.style.webkitTransform = 'translateY(0px)';\n\
-    text.textContent = self.PULL_TEXT;\n\
-    img.className = 'ptr_image';\n\
+    textEl.textContent = self.PULL_TEXT;\n\
+    imgEl.className = 'ptr_image';\n\
   }\n\
 \n\
   var refresh = this.refresh = function () {\n\
-      wrapper.style.webkitTransform = 'translateY(40px)';\n\
-      img.className += ' ptr_loading';\n\
-      text.textContent = self.LOADING_TEXT;\n\
+      iscroll.scrollTo(40, 100);\n\
+      imgEl.className += ' ptr_loading';\n\
+      textEl.textContent = self.LOADING_TEXT;\n\
       loading = true;\n\
-      scrollTo(el, 1, function () {\n\
-        var timeout = setTimeout(callback, self.timeout);\n\
-        var cb = once(function () {\n\
-          clearTimeout(timeout);\n\
-          callback();\n\
-        });\n\
-        fn(cb);\n\
+      var timeout = setTimeout(callback, self.timeout);\n\
+      var cb = once(function () {\n\
+        clearTimeout(timeout);\n\
+        callback();\n\
       });\n\
+      fn(cb);\n\
   };\n\
 \n\
-  events.bind(el, 'touchend', function (e) {\n\
+  iscroll.on('release', function () {\n\
     if (start) {\n\
       refresh();\n\
     }\n\
     start = false;\n\
   })\n\
-\n\
-  function scrollTo(el, y, cb) {\n\
-    scrolling = true;\n\
-    var start = {\n\
-      top: el.scrollTop\n\
-    }\n\
-    // setup tween\n\
-    var tween = Tween(start)\n\
-      .ease('out-circ')\n\
-      .to({ top: y})\n\
-      .duration( 1000);\n\
-\n\
-    // scroll\n\
-    tween.update(function(o){\n\
-      el.scrollTop = o.top;\n\
-    });\n\
-\n\
-    // handle end\n\
-    tween.on('end', function(){\n\
-      animate = function(){};\n\
-      tween = null;\n\
-      scrolling = false;\n\
-      cb();\n\
-    });\n\
-\n\
-    // animate\n\
-    function animate() {\n\
-      raf(animate);\n\
-      tween.update();\n\
-    }\n\
-\n\
-    animate();\n\
-  }\n\
 }\n\
 \n\
 //# sourceURL=index.js"

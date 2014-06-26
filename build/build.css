@@ -1,3 +1,17 @@
+.iscroll-handlebar {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  -webkit-transition: background-color 0.15s linear, -webkit-transform 0.01s linear;
+  transition: background-color 0.15s linear, transform 0.01s linear;
+  width: 4px;
+  border-radius: 2px;
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 99999;
+  height: 30px;
+}
+
+
 @font-face {
   font-family: 'ptr';
   src: url('pull-to-refresh/font/ptr.eot?2850022');
@@ -10,24 +24,9 @@
 }
 
 .ptr_scrollable {
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  width: 100%;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.ptr_wrap {
   position: relative;
-  min-height: 100%;
-  -webkit-transform: translate3d(0, 0, 0);
-  -webkit-transform-style: preserve-3d;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
 }
 
 .ptr_box {

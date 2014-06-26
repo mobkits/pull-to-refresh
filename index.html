@@ -9,6 +9,10 @@
   <script src="build/build.js"></script>
   <link rel="stylesheet" href="build/build.css">
   <style>
+  * {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
   body {
     font-family: Microsoft YaHei,helvetica,tahoma,arial,SimSun;
     -webkit-user-select: none;
@@ -27,36 +31,20 @@
     right: 0;
     left: 0;
     z-index: 10;
-    height: 54px;
+    height: 50px;
     line-height: 34px;
-    padding-bottom: 5px;
-    padding-top: 15px;
-    box-sizing: border-box;
     top: 0;
     display: block;
     background-color: #4F8EF7;
-    opacity: 0.75;
+    opacity: 0.9;
     -webkit-box-orient: horizontal;
     box-orient: horizontal;
-  }
-  header .btn,
-  header .btn:hover,
-  header .btn:active {
-    position: absolute;
-    right: 20px;
-    text-decoration: none;
-    color: #fff;
-  }
-  h1 {
-    margin: 0px;
+    line-height: 50px;
     font-size: 30px;
-    font-weight: normal;
     color: #fff;
     text-align: center;
   }
-
   .content {
-    border-top: 1px solid #0a0a0a;
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -83,9 +71,9 @@
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   }
 
-  #demo {
-    position: absolute;
-    top: 53px;
+  #wrapper {
+    position: fixed;
+    top: 50px;
     left: 0px;
     right: 0px;
     bottom: 0px;
@@ -94,12 +82,10 @@
 </head>
 <body>
     <header>
-      <h1>
         点击刷新
-      </h1>
     </header>
-    <div id="demo" class="ptr_scrollable">
-      <div class="ptr_wrap">
+    <div id="wrapper">
+      <div id="demo" class="ptr_scrollable">
         <ol class="content">
           <li id="console"><strong>Pull here to try</strong></li>
           <li>Lorem ipsum dolor sit amet,</li>
@@ -190,12 +176,10 @@
     </div>
   <script>
     var el = document.getElementById('demo');
-    var fix = require('scrollfix');
-    fix(el);
-    var ptr = require('pull-to-refresh');
+    var Ptr = require('pull-to-refresh');
     var domify = require('domify');
     var list =el.querySelector('.content');
-    var my_ptr = ptr(el, function(cb) {
+    var ptr = new Ptr(el, function(cb) {
       var n = Math.floor(Math.random() * 10);
       var html = '';
       for (var i = 0; i < 5; i ++) {
@@ -208,7 +192,7 @@
       }, 1000);
     });
     document.querySelector('header').addEventListener('touchend', function() {
-      my_ptr.refresh();
+      ptr.refresh();
     });
 
   </script>
