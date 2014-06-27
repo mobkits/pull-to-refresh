@@ -1,7 +1,7 @@
 {
   "name": "pull-to-refresh",
   "description": "pull to refresh",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "keywords": ["pull", "refresh"],
   "templates": [
     "template.html"
