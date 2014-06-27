@@ -22,10 +22,6 @@
   "license": "MIT",
   "main": "index.js",
   "fonts": [
-    "font/ptr.eot",
-    "font/ptr.svg",
-    "font/ptr.ttf",
-    "font/ptr.woff"
   ],
   "scripts": [
     "index.js"
