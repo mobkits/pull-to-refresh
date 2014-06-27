@@ -1379,7 +1379,7 @@ require.modules["chemzqm~computed-style"] = require.modules["chemzqm~computed-st
 require.modules["computed-style"] = require.modules["chemzqm~computed-style@0.1.1"];
 
 
-require.register("chemzqm~iscroll@0.1.4", Function("exports, module",
+require.register("chemzqm~iscroll@0.1.5", Function("exports, module",
 "var has3d = require(\"component~has-translate3d@0.0.3\");\n\
 var touchAction = require(\"component~touchaction-property@0.0.1\");\n\
 var events = require(\"component~events@1.0.7\");\n\
@@ -1395,6 +1395,8 @@ var now = Date.now || function () {\n\
 }\n\
 var getterAndSetter = (typeof Object.__defineGetter__ === 'function' && typeof Object.__defineSetter__ === 'function');\n\
 \n\
+var minSpeed = 0.01;\n\
+\n\
 function lastVisible(el) {\n\
   var nodes = el.childNodes;\n\
   for(var i = nodes.length - 1; i >=0; i --) {\n\
@@ -1405,13 +1407,13 @@ function lastVisible(el) {\n\
   }\n\
 }\n\
 \n\
-\n\
 function Iscroll(el, opts) {\n\
   if (! (this instanceof Iscroll)) return new Iscroll(el, opts);\n\
   this.y = 0;\n\
   this.el = el;\n\
   this.pb = parseInt(styles(el).getPropertyValue('padding-bottom'), 10);\n\
   this.touchAction('none');\n\
+  this.el.style[transform + 'Style'] = 'preserve-3d';\n\
   this.refresh();\n\
   this.bind();\n\
   var self = this;\n\
@@ -1537,7 +1539,7 @@ Iscroll.prototype.calcuteSpeed = function (y) {\n\
   if (ts - this.down.at < 100) {\n\
     this.distance = y - this.pageY;\n\
     this.speed = Math.abs(this.distance/dt);\n\
-  } else if(dt > 50){\n\
+  } else if(dt > 100){\n\
     this.distance = y - this.pageY;\n\
     this.speed = Math.abs(this.distance/dt);\n\
     this.ts = ts;\n\
@@ -1556,9 +1558,9 @@ Iscroll.prototype.ontouchend = function (e) {\n\
 }\n\
 \n\
 Iscroll.prototype.momentum = function () {\n\
-  var deceleration = 0.0005;\n\
+  var deceleration = 0.0004;\n\
   var speed = this.speed;\n\
-  speed = min(speed, 1.1);\n\
+  speed = min(speed, 0.8);\n\
   var destination = this.y + ( speed * speed ) / ( 2 * deceleration ) * ( this.distance < 0 ? -1 : 1 );\n\
   var duration = speed / deceleration;\n\
   var newY, ease;\n\
@@ -1593,7 +1595,7 @@ Iscroll.prototype.scrollTo = function (y, duration, easing) {\n\
     return this.translate(y);\n\
   }\n\
 \n\
-  easing = easing || 'out-circ';\n\
+  easing = easing || 'out-cube';\n\
   var tween = this.tween = Tween({y : this.y})\n\
       .ease(easing)\n\
       .to({y: y})\n\
@@ -1665,9 +1667,9 @@ Iscroll.prototype.translate = function(y) {\n\
     if (this.handlebar) this.transformHandlebar();\n\
   }\n\
   if (has3d) {\n\
-    s.webkitTransform = 'translate3d(0, ' + y + 'px' + ', 0)';\n\
+    s[transform] = 'translate3d(0, ' + y + 'px' + ', 0)';\n\
   } else {\n\
-    s.webKitTransform = 'translateY(' + y + 'px)';\n\
+    s[transform] = 'translateY(' + y + 'px)';\n\
   }\n\
 }\n\
 \n\
@@ -1692,9 +1694,9 @@ Iscroll.prototype.transformHandlebar = function(){\n\
   var y = parseInt(- bh * this.y/ih);\n\
   var s = this.handlebar.style;\n\
   if (has3d) {\n\
-    s.webkitTransform = 'translate3d(0, ' + y + 'px' + ', 0)';\n\
+    s[transform] = 'translate3d(0, ' + y + 'px' + ', 0)';\n\
   } else {\n\
-    s.webKitTransform = 'translateY(' + y + 'px)';\n\
+    s[transform] = 'translateY(' + y + 'px)';\n\
   }\n\
 }\n\
 \n\
@@ -1714,12 +1716,12 @@ Iscroll.prototype.hideHandlebar = function () {\n\
 \n\
 module.exports = Iscroll;\n\
 \n\
-//# sourceURL=components/chemzqm/iscroll/0.1.4/index.js"
+//# sourceURL=components/chemzqm/iscroll/0.1.5/index.js"
 ));
 
-require.modules["chemzqm-iscroll"] = require.modules["chemzqm~iscroll@0.1.4"];
-require.modules["chemzqm~iscroll"] = require.modules["chemzqm~iscroll@0.1.4"];
-require.modules["iscroll"] = require.modules["chemzqm~iscroll@0.1.4"];
+require.modules["chemzqm-iscroll"] = require.modules["chemzqm~iscroll@0.1.5"];
+require.modules["chemzqm~iscroll"] = require.modules["chemzqm~iscroll@0.1.5"];
+require.modules["iscroll"] = require.modules["chemzqm~iscroll@0.1.5"];
 
 
 require.register("component~domify@1.2.2", Function("exports, module",
@@ -2088,7 +2090,7 @@ var Tween = require(\"component~tween@1.1.0\");\n\
 var raf = require(\"component~raf@1.1.3\");\n\
 var once = require(\"component~once@0.0.1\");\n\
 var template = require(\"pull-to-refresh/template.html\");\n\
-var Iscroll = require(\"chemzqm~iscroll@0.1.4\");\n\
+var Iscroll = require(\"chemzqm~iscroll@0.1.5\");\n\
 \n\
 var LOADING_TEXT = '加载中...';\n\
 var PULL_TEXT = '下拉刷新';\n\
