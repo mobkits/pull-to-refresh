@@ -62,7 +62,7 @@
 
 .ptr_box .ptr_image.ptr_loading:before {
   content: '\e800';
-  font-size: 18px;
+  font-size: 16px;
 }
 
 @-webkit-keyframes spin {
