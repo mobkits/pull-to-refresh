@@ -76,6 +76,10 @@ module.exports = function PTR(el, opt, fn) {
       fn(cb);
   };
 
+  this.unbind = function () {
+    iscroll.unbind();
+  }
+
   iscroll.on('release', function () {
     if (start) {
       refresh();
