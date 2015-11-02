@@ -1,24 +1,13 @@
-
-build: components *.js *.css
-	@component build --dev
-
-components: component.json
-	@component install --dev
+dev:
+	@gulp
 
 watch:
 	@component build --dev -w
 
 doc:
-	@component build --dev -c
-	@rm -fr .gh-pages
-	@mkdir .gh-pages
-	@cp -rf build .gh-pages/
-	@cp index.html .gh-pages/index.html
-	@ghp-import .gh-pages -n -p
-	@rm -fr .gh-pages
-	@component build --dev
+	@ghp-import example -n -p
 
 clean:
 	rm -fr build components template.js
 
-.PHONY: clean test
+.PHONY: clean test dev

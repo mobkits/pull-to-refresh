@@ -1,10 +1,12 @@
 # Pull-to-refresh
 
-  A pull to refresh component for user loves elegence solution.
+  A pull to refresh component for developers who loves elegence solution.
+  Now works with webpack and browserify.
 
   [demo](http://chemzqm.github.io/pull-to-refresh).
+  [Javascript code of demo](https://github.com/chemzqm/pull-to-refresh/blob/gh-pages/index.js)
 
-  Tip: Avoid to use transition with dragging.
+  Tip: Avoid to use transition when dragging.
 
 ## Features
 
@@ -13,6 +15,10 @@
 * simplified code and API.
 
 ## Installation
+
+  Prefer to install with npm:
+
+    $ npm install pull-to-refresh
 
   Install with [component(1)](http://component.io):
 
