@@ -1,6 +1,6 @@
 {
   "name": "pull-to-refresh",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "no jquey simplified pull to refresh component",
   "main": "index.js",
   "scripts": {
