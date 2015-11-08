@@ -2,7 +2,6 @@ var classes = require('classes')
 var domify = require('domify')
 var once = require('once')
 var template = require('./template.html')
-var Iscroll = require('iscroll')
 
 var LOADING_TEXT = '加载中...'
 var PULL_TEXT = '下拉刷新'
@@ -28,40 +27,38 @@ module.exports = function PTR(el, opt, fn) {
   this.timeout = opt.timeout || 10000
   var start
   var loading
-  prepend(el, domify(template))
-  var imgEl = el.querySelector('.ptr_image')
-  var textEl = el.querySelector('.ptr_text')
-  var iscroll = new Iscroll(el, {
-    handlebar: true,
-    autorefresh: false
-  })
-
-  iscroll.on('scroll', function(top) {
+  var box = domify(template)
+  prepend(el, box)
+  var imgEl = box.querySelector('.ptr_image')
+  var textEl = box.querySelector('.ptr_text')
+  var self = this
+  function onscroll() {
     if (loading) return
+    var top = el.scrollTop
     if (top < 0 && top >= - 40) {
-      textEl.textContent = this.PULL_TEXT
+      textEl.textContent = self.PULL_TEXT
     }
     if (top < -40) {
       classes(imgEl).add('ptr_rotate')
-      textEl.textContent = this.RELEASE_TEXT
+      textEl.textContent = self.RELEASE_TEXT
       start = true
     } else {
       classes(imgEl).remove('ptr_rotate')
       start = false
     }
-  }.bind(this))
+  }
+  el.addEventListener('scroll', onscroll, false)
 
-  var self = this
   function callback() {
-    iscroll.scrollTo(0, 100)
-    iscroll.refresh()
+    el.scrollTop = 0
     loading = false
     textEl.textContent = self.PULL_TEXT
     imgEl.className = 'ptr_image'
   }
 
-  var refresh = this.refresh = function () {
-      iscroll.scrollTo(40, 100)
+  var refresh = this.refresh = function (e) {
+      if (e) e.stopImmediatePropagation()
+      el.scrollTop = -40
       imgEl.className += ' ptr_loading'
       textEl.textContent = self.LOADING_TEXT
       loading = true
@@ -70,17 +67,22 @@ module.exports = function PTR(el, opt, fn) {
         clearTimeout(timeout)
         callback()
       })
-      fn(cb)
+      var res = fn(cb)
+      if (res && typeof res.then === 'function') {
+        res.then(cb, cb)
+      }
   }
 
-  this.unbind = function () {
-    iscroll.unbind()
-  }
-
-  iscroll.on('release', function () {
+  var end = function (e) {
     if (start) {
-      refresh()
+      refresh(e)
     }
     start = false
-  })
+  }
+  document.addEventListener('touchend', end)
+
+  this.unbind = function () {
+    el.removeEventListener('scroll', onscroll)
+    document.removeEventListener('touchend', end)
+  }
 }

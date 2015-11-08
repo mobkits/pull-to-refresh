@@ -1,7 +1,8 @@
 # Pull-to-refresh
 
   A pull to refresh component for developers who loves elegence solution.
-  Now works with webpack and browserify.
+  Now works with webpack and browserify, it's supposed to works with [iscroll-component](https://github.com/chemzqm/iscroll)
+  To make them works reansonable, they are decoupled in 1.0.0
 
   [demo](http://chemzqm.github.io/pull-to-refresh).
   [Javascript code of demo](https://github.com/chemzqm/pull-to-refresh/blob/gh-pages/index.js)
@@ -25,25 +26,39 @@
     $ component install chemzqm/pull-to-refresh
 
 ## Example
-
+``` css
+.scrollable {
+  position: fixed;
+  top: 50px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+```
 ``` html
-<div id="demo" class="ptr_scrollable">
+<div id="demo" class="scrollable">
   <ul>
     <li></li>
   </ul>
 </div>
 ```
-* dom tree should like this, `#demo` is used to define the scroll area.
+Dom tree should like this, `scrollable` is able to scroll by default.
 
 ``` js
-  var el = document.getElementById('demo');
-  var Ptr = require('pull-to-refresh');
-  var ptr = new Ptr(el, function(cb) {
-      ajax_and_prepend_dom( )//load your data and append them to the list
-      cb(); //don't forget to call callback!
-    }, 1000);
-  });
+var el = document.getElementById('demo')
+var Ptr = require('pull-to-refresh')
+var ptr = new Ptr(el, function(cb) {
+    ajax_and_prepend_dom( )//load your data and append them to the list
+    cb() //You can use the callback or return a promise
+  })
+})
+// Iscroll have to inited after Ptr as it needs to create a wrapper
+// May add mutation observer in the future?
+var is = Iscroll(el, { handlebar: true })
 ```
+You can think iscroll just add nagetive scrollTop value to the scrollable.
 
 ## API
 
@@ -55,6 +70,10 @@
 ### .refresh()
 
 Perform refresh (with animation scroll to top at first).
+
+### .unbind()
+
+Unbind all event listeners
 
 ## License
 
