@@ -1,11 +1,13 @@
 # Pull-to-refresh
 
   A pull to refresh component for developers who loves elegence solution.
+
   Now works with webpack and browserify, it's supposed to works with [iscroll-component](https://github.com/chemzqm/iscroll)
+
   To make them works reansonable, they are decoupled in 1.0.0
 
   [demo](http://chemzqm.github.io/pull-to-refresh).
-  [Javascript code of demo](https://github.com/chemzqm/pull-to-refresh/blob/gh-pages/index.js)
+  [code of demo](https://github.com/chemzqm/pull-to-refresh/blob/gh-pages/index.js)
 
   Tip: Avoid to use transition when dragging.
 
