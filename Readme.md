@@ -41,24 +41,24 @@
 ```
 ``` html
 <div id="demo" class="scrollable">
-  <ul>
-    <li></li>
-  </ul>
+  <div>
+    <ul>
+      <li></li>
+    </ul>
+  </div>
 </div>
 ```
-Dom tree should like this, `scrollable` is able to scroll by default.
+Notice the scrollable have a single child for [iscroll-component](https://github.com/chemzqm/iscroll) to work
 
 ``` js
 var el = document.getElementById('demo')
 var Ptr = require('pull-to-refresh')
+var is = Iscroll(el, { handlebar: true })
 var ptr = new Ptr(el, function(cb) {
     ajax_and_prepend_dom( )//load your data and append them to the list
     cb() //You can use the callback or return a promise
   })
 })
-// Iscroll have to inited after Ptr as it needs to create a wrapper
-// May add mutation observer in the future?
-var is = Iscroll(el, { handlebar: true })
 ```
 You can think iscroll just add nagetive scrollTop value to the scrollable.
 

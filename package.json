@@ -31,9 +31,15 @@
   },
   "style": "./ptr.css",
   "devDependencies": {
-    "iscroll-component": "^1.0.1",
+    "connect-livereload": "^0.5.3",
     "css-loader": "^0.21.0",
+    "gulp": "^3.9.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-serve": "^1.2.0",
+    "gulp-util": "^3.0.7",
     "html-loader": "^0.3.0",
-    "style-loader": "^0.13.0"
+    "iscroll-component": "^1.1.1",
+    "style-loader": "^0.13.0",
+    "webpack": "^1.12.3"
   }
 }

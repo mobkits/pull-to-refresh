@@ -28,7 +28,12 @@ module.exports = function PTR(el, opt, fn) {
   var start
   var loading
   var box = domify(template)
-  prepend(el, box)
+  var first = el.firstElementChild
+  if (first) {
+    prepend(first, box)
+  } else {
+    prepend(el, box)
+  }
   var imgEl = box.querySelector('.ptr_image')
   var textEl = box.querySelector('.ptr_text')
   var self = this

@@ -6,6 +6,7 @@ var Ptr = require('..')
 
 var el = document.getElementById('scrollable')
 var list =el.querySelector('.content')
+var is = Iscroll(el, { handlebar: true })
 var ptr = new Ptr(el, function() {
   var n = Math.floor(Math.random() * 10)
   var html = ''
@@ -22,7 +23,6 @@ var ptr = new Ptr(el, function() {
     }, 1000)
   })
 })
-var is = Iscroll(el, { handlebar: true })
 
 document.querySelector('header').addEventListener('touchend', function() {
   ptr.refresh()
