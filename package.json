@@ -4,7 +4,7 @@
   "description": "no jquey simplified pull to refresh component",
   "main": "index.js",
   "scripts": {
-    "test": "make"
+    "test": "make test-coveralls"
   },
   "repository": {
     "type": "git",
