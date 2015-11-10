@@ -1,5 +1,8 @@
 # Pull-to-refresh
 
+  [![Build Status](https://secure.travis-ci.org/chemzqm/pull-to-refresh.svg)](http://travis-ci.org/chemzqm/pull-to-refresh)
+  [![Coverage Status](https://coveralls.io/repos/chemzqm/pull-to-refresh/badge.svg?branch=master&service=github)](https://coveralls.io/github/chemzqm/pull-to-refresh?branch=master)
+
   A pull to refresh component for developers who loves elegence solution.
 
   Now works with webpack and browserify, it's supposed to works with [iscroll-component](https://github.com/chemzqm/iscroll)
