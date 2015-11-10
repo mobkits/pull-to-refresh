@@ -613,9 +613,7 @@
 	var Handlebar = __webpack_require__(30)
 	var max = Math.max
 	var min = Math.min
-	var now = Date.now || function () {
-	  return (new Date()).getTime()
-	}
+	var now = Date.now
 	
 	var defineProperty = Object.defineProperty
 	
@@ -632,7 +630,7 @@
 	function customEvent(name) {
 	  var e
 	  try {
-	    e = new CustomEvent('scroll')
+	    e = new CustomEvent(name)
 	  } catch(error) {
 	    try {
 	      e = document.createEvent('CustomEvent')
@@ -699,6 +697,7 @@
 	  this.events.bind('touchstart')
 	  this.events.bind('touchmove')
 	  this.docEvents.bind('touchend')
+	  this.docEvents.bind('touchcancel', 'ontouchend')
 	}
 	
 	/**
@@ -722,12 +721,13 @@
 	  this.docEvents.unbind()
 	  window.removeEventListener('orientationchange', this._refresh, false)
 	  window.removeEventListener('resize', this._refresh, false)
-	  if (this.handlebar) this.scrollable.removeChild(this.handlebar)
+	  if (this.handlebar) this.scrollable.removeChild(this.handlebar.el)
 	}
 	
 	Iscroll.prototype.restrict = function (y) {
 	  y = min(y , 80)
-	  y = max(y , this.viewHeight - this.height - 80)
+	  var h = Math.max(this.height, this.viewHeight)
+	  y = max(y , this.viewHeight - h - 80)
 	  return y
 	}
 	
@@ -740,10 +740,10 @@
 	  if (this.handlebar) this.resizeHandlebar()
 	
 	  var touch = this.getTouch(e)
-	  this.pageY = touch.pageY
+	  this.clientY = touch.clientY
 	  this.down = {
-	    x: touch.pageX,
-	    y: touch.pageY,
+	    x: touch.clientX,
+	    y: touch.clientY,
 	    start: this.y,
 	    at: now()
 	  }
@@ -754,17 +754,16 @@
 	  // do nothing if left right move
 	  if (e.touches.length > 1 || !this.down || this.leftright) return
 	  var touch = this.getTouch(e)
-	
 	  var down = this.down
-	  var y = touch.pageY
-	  this.dy = y - down.y
-	
+	  var dy = this.dy = touch.clientY - down.y
+	  var dx = touch.clientX - down.x
+	  // can not determine
+	  if (dx === 0 && dy === 0) return
 	  // determine dy and the slope
 	  if (null == this.leftright) {
-	    var x = touch.pageX
-	    var dx = x - down.x
-	    var slope = dx / this.dy
-	
+	    // no move if contentHeight < viewHeight and move up
+	    if (this.height <= this.viewHeight && dy < 0) return
+	    var slope = dx / dy
 	    // if is greater than 1 or -1, we're swiping up/down
 	    if (slope > 1 || slope < -1) {
 	      this.leftright = true
@@ -776,32 +775,34 @@
 	  }
 	
 	  //calculate speed every 100 milisecond
-	  this.calcuteSpeed(y)
+	  this.calcuteSpeed(touch.clientY)
 	  var start = this.down.start
-	  var dest = this.restrict(start + this.dy)
+	  var dest = this.restrict(start + dy)
 	  this.translate(dest)
 	}
 	
 	Iscroll.prototype.calcuteSpeed = function (y) {
 	  var ts = now()
-	  this.ts = this.ts || this.down.at
-	  this.pageY = (this.pageY == null) ? this.down.y : this.pageY
 	  var dt = ts - this.ts
 	  if (ts - this.down.at < 100) {
-	    this.distance = y - this.pageY
+	    this.distance = y - this.clientY
 	    this.speed = Math.abs(this.distance/dt)
 	  } else if(dt > 100){
-	    this.distance = y - this.pageY
+	    this.distance = y - this.clientY
 	    this.speed = Math.abs(this.distance/dt)
 	    this.ts = ts
-	    this.pageY = y
+	    this.clientY = y
 	  }
 	}
 	
 	Iscroll.prototype.ontouchend = function (e) {
 	  if (!this.down || this.leftright) return
+	  if (this.height <= this.viewHeight && this.dy < 0) {
+	    if(this.handlebar) this.handlebar.hide()
+	    return
+	  }
 	  var touch = this.getTouch(e)
-	  this.calcuteSpeed(touch.pageY)
+	  this.calcuteSpeed(touch.clientY)
 	  var m = this.momentum()
 	  this.scrollTo(m.dest, m.duration, m.ease)
 	  this.emit('release', this.y)
@@ -2334,6 +2335,7 @@
 	    fn = opt
 	    opt = {}
 	  }
+	  this.el = el
 	  this.LOADING_TEXT = opt.LOADING_TEXT || LOADING_TEXT
 	  this.PULL_TEXT = opt.PULL_TEXT || PULL_TEXT
 	  this.RELEASE_TEXT = opt.RELEASE_TEXT || RELEASE_TEXT
@@ -2341,7 +2343,7 @@
 	  var start
 	  var loading
 	  var box = domify(template)
-	  var first = el.firstChild
+	  var first = el.firstElementChild
 	  if (first) {
 	    prepend(first, box)
 	  } else {
