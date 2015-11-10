@@ -170,3 +170,24 @@ describe('.unbind()', function() {
     })
   })
 })
+
+describe('promise', function() {
+  it('should support promise', function () {
+    var fired
+    var ptr = Ptr(scrollable, function () {
+      return new Promise(function (resolve) {
+        fired = true
+        resolve()
+      })
+    })
+    Iscroll(scrollable)
+    var li = scrollable.querySelector('li')
+    var t = Touch(li, {speed: 200})
+    return t.moveDown(60).then(function () {
+      assert.equal(fired, true)
+      var iel = getElement('image')
+      assert.equal(iel.className, 'ptr_image')
+      ptr.unbind()
+    })
+  })
+})
