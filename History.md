@@ -1,3 +1,7 @@
+# 1.0.3
+* add `this.el`
+* add test
+
 # 1.0.2
 * works with iscroll 1.1.1
 
