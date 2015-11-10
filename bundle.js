@@ -51,7 +51,7 @@
 	var Ptr = __webpack_require__(31)
 	
 	var el = document.getElementById('scrollable')
-	var list =el.querySelector('.content')
+	var list = el.querySelector('.content')
 	var is = Iscroll(el, { handlebar: true })
 	var ptr = new Ptr(el, function() {
 	  var n = Math.floor(Math.random() * 10)
@@ -2341,7 +2341,7 @@
 	  var start
 	  var loading
 	  var box = domify(template)
-	  var first = el.firstElementChild
+	  var first = el.firstChild
 	  if (first) {
 	    prepend(first, box)
 	  } else {

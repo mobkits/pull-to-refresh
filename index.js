@@ -5,7 +5,7 @@ var Iscroll = require('iscroll')
 var Ptr = require('..')
 
 var el = document.getElementById('scrollable')
-var list =el.querySelector('.content')
+var list = el.querySelector('.content')
 var is = Iscroll(el, { handlebar: true })
 var ptr = new Ptr(el, function() {
   var n = Math.floor(Math.random() * 10)
