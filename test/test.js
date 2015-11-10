@@ -171,6 +171,21 @@ describe('.unbind()', function() {
   })
 })
 
+describe('.refresh()', function() {
+  it('should refresh', function () {
+    var fired
+    var ptr = Ptr(scrollable, function () {
+      return new Promise(function (resolve) {
+        fired = true
+        resolve()
+      })
+    })
+    Iscroll(scrollable)
+    ptr.refresh()
+    assert.equal(fired, true)
+  })
+})
+
 describe('promise', function() {
   it('should support promise', function () {
     var fired
@@ -191,3 +206,4 @@ describe('promise', function() {
     })
   })
 })
+
