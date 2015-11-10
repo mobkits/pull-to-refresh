@@ -21,6 +21,7 @@ module.exports = function PTR(el, opt, fn) {
     fn = opt
     opt = {}
   }
+  this.el = el
   this.LOADING_TEXT = opt.LOADING_TEXT || LOADING_TEXT
   this.PULL_TEXT = opt.PULL_TEXT || PULL_TEXT
   this.RELEASE_TEXT = opt.RELEASE_TEXT || RELEASE_TEXT
