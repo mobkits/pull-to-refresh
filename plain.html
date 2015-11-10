@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,24 +72,24 @@
   }
 
   #scrollable {
+    overflow-y: scroll;
     position: fixed;
     top: 50px;
     left: 0px;
     right: 0px;
     bottom: 0px;
-    overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
   }
-  #scrollable ul {
+  #demo {
   }
   </style>
 </head>
 <body>
     <header>
-      点击刷新 <span id="log"></span>
+    点击刷新 <span id="top"></span>
     </header>
     <div id="scrollable">
-      <div>
+      <div id="demo">
         <ol class="content">
           <li id="console"><strong>Pull here to try</strong></li>
           <li>Lorem ipsum dolor sit amet,</li>
@@ -177,6 +178,6 @@
         </ol>
       </div>
     </div>
-  <script src="./bundle.js"></script>
+  <script src="./plain.js"></script>
 </body>
 </html>
