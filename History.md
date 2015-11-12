@@ -1,3 +1,6 @@
+# 1.1.0
+* support custom template
+
 # 1.0.3
 * add `this.el`
 * add test
