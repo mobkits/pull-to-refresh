@@ -3,6 +3,8 @@ var assert = require('assert')
 var Ptr = require('..')
 var Touch = require('touch-simulate')
 var Iscroll = require('iscroll')
+var template = require('../template.html')
+var domify = require('domify')
 
 var scrollable
 
@@ -53,6 +55,40 @@ describe('Ptr()', function() {
 
   it('should init without new', function () {
     var ptr = Ptr(scrollable, function () {
+    })
+    assert.equal(ptr.el, scrollable)
+  })
+
+  it('shold init with empty list', function () {
+    var ul = scrollable.querySelector('ul')
+    ul.parentNode.removeChild(ul)
+    var ptr = Ptr(scrollable, function () {
+    })
+    assert.equal(ptr.el, scrollable)
+  })
+
+  it('should init with empty scrollable', function () {
+    scrollable.innerHTML = ''
+    var ptr = Ptr(scrollable, function () {
+    })
+    assert.equal(ptr.el, scrollable)
+  })
+
+  it('should init with options', function () {
+    var ptr = Ptr(scrollable, {LOADING_TEXT: 'loading'}, function () {
+    })
+    assert.equal(ptr.el, scrollable)
+    assert.equal(ptr.LOADING_TEXT, 'loading')
+  })
+
+  it('should works with custom template', function () {
+    var ptr = Ptr(scrollable, {template: template}, function () {
+    })
+    assert.equal(ptr.el, scrollable)
+  })
+
+  it('should works with custom template element', function () {
+    var ptr = Ptr(scrollable, {template: domify(template)}, function () {
     })
     assert.equal(ptr.el, scrollable)
   })
@@ -114,6 +150,20 @@ describe('scroll', function () {
   it('should call loading function', function () {
     var fired
     var ptr = Ptr(scrollable, function () {
+      fired = true
+    })
+    Iscroll(scrollable)
+    var li = scrollable.querySelector('li')
+    var t = Touch(li, {speed: 200})
+    return t.moveDown(60).then(function () {
+      assert.equal(fired, true)
+      ptr.unbind()
+    })
+  })
+
+  it('should call loading function with option set', function () {
+    var fired
+    var ptr = Ptr(scrollable, {LOADING_TEXT: 'loading'}, function () {
       fired = true
     })
     Iscroll(scrollable)

@@ -28,7 +28,16 @@ module.exports = function PTR(el, opt, fn) {
   this.timeout = opt.timeout || 10000
   var start
   var loading
-  var box = domify(template)
+  var box
+  var tel = opt.template
+  // custom template
+  if (typeof tel === 'string') {
+    box = domify(template)
+  } else if (tel && tel.nodeType) {
+    box = opt.template
+  } else {
+    box = domify(template)
+  }
   var first = el.firstElementChild
   if (first) {
     prepend(first, box)
