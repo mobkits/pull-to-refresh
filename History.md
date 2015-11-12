@@ -1,3 +1,6 @@
+# 1.1.1
+* add documentation
+
 # 1.1.0
 * support custom template
 
