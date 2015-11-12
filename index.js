@@ -15,6 +15,18 @@ function prepend(parentNode, node) {
   }
 }
 
+/**
+ * `el` the scrollable element
+ * `callback` is called when loading start, the first argument which is a callback function should be called after the dom prepend to the list.
+ * `option` object could contain `PULL_TEXT` `RELEASE_TEXT` `LOADING_TEXT` and `timeout` for the request timeout in millisecond.
+ * `option.template` contains a custom template(string or element) for the inserted element
+ * `option.timeout` millisecond of request timeout, default `10000`
+ *
+ * @param  {Element}  el
+ * @param  {Object} opt
+ * @param  {Function}  fn
+ * @api public
+ */
 module.exports = function PTR(el, opt, fn) {
   if (!(this instanceof PTR)) return new PTR(el, opt, fn)
   if (typeof opt === 'function') {
@@ -71,6 +83,12 @@ module.exports = function PTR(el, opt, fn) {
     imgEl.className = 'ptr_image'
   }
 
+  /**
+   * Refresh for more data
+   *
+   * @param  {Event}  event
+   * @api public
+   */
   var refresh = this.refresh = function (e) {
       if (e) e.stopImmediatePropagation()
       el.scrollTop = -40
@@ -96,6 +114,12 @@ module.exports = function PTR(el, opt, fn) {
   }
   document.addEventListener('touchend', end)
 
+  /**
+   * Unbind event listener and remove inserted element
+   *
+   * @return {undefined}
+   * @api public
+   */
   this.unbind = function () {
     el.removeEventListener('scroll', onscroll)
     document.removeEventListener('touchend', end)
