@@ -27,7 +27,7 @@ myConfig.debug = true
 var paths = {
   scripts: ['index.js', 'example/index.js'],
   // file list for watching
-  asserts: ['example/index.js', 'exmaple/*.css', 'example/index.html']
+  asserts: ['ptr.css', 'example/index.js', 'exmaple/*.css', 'example/index.html']
 }
 
 gulp.task('default', ['build-dev'])
