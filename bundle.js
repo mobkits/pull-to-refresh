@@ -48,7 +48,7 @@
 	__webpack_require__(5)
 	var domify = __webpack_require__(7)
 	var Iscroll = __webpack_require__(8)
-	var Ptr = __webpack_require__(31)
+	var Ptr = __webpack_require__(29)
 	
 	var el = document.getElementById('scrollable')
 	var list = el.querySelector('.content')
@@ -116,7 +116,7 @@
 	
 	
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: 'ptr';\n  src: url('data:application/octet-stream;base64,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') format('woff'),\n       url('data:application/octet-stream;base64,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sCYrLbA7LLAAFrAEJbAEJiAuRyNHI2GwBkUrIyA8IC4jOLEmARQrLbA8LLEIBCVCsAAWsAQlsAQlIC5HI0cjYSCwBCNCsAZFKyCwYFBYILBAUVizAiADIBuzAiYDGllCQiMgR7AEQ7CAYmAgsAArIIqKYSCwAkNgZCOwA0NhZFBYsAJDYRuwA0NgWbADJbCAYmGwAiVGYTgjIDwjOBshICBGI0ewACsjYTghWbEmARQrLbA9LLAwKy6xJgEUKy2wPiywMSshIyAgPLAEI0IjOLEmARQrsARDLrAmKy2wPyywABUgR7AAI0KyAAEBFRQTLrAsKi2wQCywABUgR7AAI0KyAAEBFRQTLrAsKi2wQSyxAAEUE7AtKi2wQiywLyotsEMssAAWRSMgLiBGiiNhOLEmARQrLbBELLAII0KwQystsEUssgAAPCstsEYssgABPCstsEcssgEAPCstsEgssgEBPCstsEkssgAAPSstsEossgABPSstsEsssgEAPSstsEwssgEBPSstsE0ssgAAOSstsE4ssgABOSstsE8ssgEAOSstsFAssgEBOSstsFEssgAAOystsFIssgABOystsFMssgEAOystsFQssgEBOystsFUssgAAPistsFYssgABPistsFcssgEAPistsFgssgEBPistsFkssgAAOistsFossgABOistsFsssgEAOistsFwssgEBOistsF0ssDIrLrEmARQrLbBeLLAyK7A2Ky2wXyywMiuwNystsGAssAAWsDIrsDgrLbBhLLAzKy6xJgEUKy2wYiywMyuwNistsGMssDMrsDcrLbBkLLAzK7A4Ky2wZSywNCsusSYBFCstsGYssDQrsDYrLbBnLLA0K7A3Ky2waCywNCuwOCstsGkssDUrLrEmARQrLbBqLLA1K7A2Ky2wayywNSuwNystsGwssDUrsDgrLbBtLCuwCGWwAyRQeLABFTAtAAAAS7gAyFJYsQEBjlm5CAAIAGMgsAEjRLADI3CyBCgJRVJEsgoCByqxBgFEsSQBiFFYsECIWLEGA0SxJgGIUVi4BACIWLEGAURZWVlZuAH/hbAEjbEFAEQAAA==') format('truetype');\n}\n\n.ptr_scrollable {\n  position: relative;\n  overflow-y: visible;\n  -webkit-overflow-scrolling: touch;\n}\n\n.ptr_box {\n  position: absolute;\n  top: -40px;\n  display: block;\n  height: 40px;\n  left: 0px;\n  right: 0;\n  overflow: hidden;\n}\n\n.ptr_box .ptr_container {\n  position: relative;\n  width: 120px;\n  margin: auto;\n  text-align: center;\n  height: 40px;\n  line-height: 40px;\n}\n\n.ptr_box .ptr_text {\n  font-size: 14px;\n}\n\n.ptr_box .ptr_image {\n  position: absolute;\n  top: 0px;\n  left: 12px;\n  height: 100%;\n  -webkit-transform: translate3d(0, 0, 0);\n  -webkit-transform-origin: center center;\n  -webkit-transition: -webkit-transform .2s linear;\n  transition: -webkit-transform .2s linear;\n}\n\n.ptr_box .ptr_image:before {\n  font-family: \"ptr\";\n  font-size: 22px;\n  text-align: center;\n  line-height: 40px;\n  content: '\\E802';\n}\n\n.ptr_box .ptr_image.ptr_rotate {\n  -webkit-transform: translate3d(0, 0, 0) rotate(180deg);\n}\n\n.ptr_box .ptr_image.ptr_loading {\n  animation: spin 0.8s infinite linear;\n}\n\n.ptr_box .ptr_image.ptr_loading:before {\n  content: '\\E800';\n  font-size: 16px;\n}\n\n@-webkit-keyframes spin {\n  from {\n    -webkit-transform: translate3d(0, 0, 0) rotate(0deg);\n  }\n  to {\n    -webkit-transform: translate3d(0, 0, 0) rotate(360deg);\n  }\n}\n", ""]);
+	exports.push([module.id, ".ptr_scrollable {\n  position: relative;\n  overflow-y: visible;\n  -webkit-overflow-scrolling: touch;\n}\n\n.ptr_box {\n  position: absolute;\n  top: -40px;\n  display: block;\n  height: 40px;\n  left: 0px;\n  right: 0;\n  overflow: hidden;\n}\n\n.ptr_box .ptr_container {\n  position: relative;\n  width: 120px;\n  margin: auto;\n  text-align: center;\n  height: 40px;\n  line-height: 40px;\n}\n\n.ptr_box .ptr_text {\n  font-size: 14px;\n}\n\n.ptr_box .ptr_image {\n  position: absolute;\n  top: 0px;\n  left: 12px;\n  height: 100%;\n  -webkit-transform: translate3d(0, 0, 0);\n  -webkit-transform-origin: center center;\n  -webkit-transition: -webkit-transform .2s linear;\n  transition: -webkit-transform .2s linear;\n  line-height: 40px;\n  width: 14px;\n  background-size: contain;\n  background-position: center;\n  background-repeat: no-repeat;\n  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDIwIDIwIj48cGF0aCBkPSJNOS44NTQgMTkuMzU0bDYtNmEuNS41IDAgMCAwLS43MDctLjcwN0wxMCAxNy43OTNWMS41YS41LjUgMCAwIDAtMSAwdjE2LjI5M2wtNS4xNDUtNS4xNDZhLjUuNSAwIDAgMC0uNzA3LjcwOGw2IDZhLjUuNSAwIDAgMCAuNzA3IDB6Ii8+PC9zdmc+);\n}\n\n.ptr_box .ptr_image.ptr_rotate {\n  -webkit-transform: translate3d(0, 0, 0) rotate(180deg);\n}\n\n.ptr_box .ptr_image.ptr_loading {\n  animation: ptr-spin 0.8s infinite linear;\n  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MzIiIGhlaWdodD0iOTMyIiB2aWV3Qm94PSIwIDAgOTMyIDkzMiI+PHBhdGggZD0iTTQ2NiA5MzJjLTEyNC40NzMgMC0yNDEuNDk1LTQ4LjQ3My0zMjkuNTEzLTEzNi40ODdDNDguNDczIDcwNy40OTUgMCA1OTAuNDczIDAgNDY2YzAtODguMTM4IDI0Ljc0LTE3My45NjIgNzEuNTQ0LTI0OC4xOTIgNDUuNTA4LTcyLjE3MiAxMDkuODIzLTEzMC40OSAxODUuOTk2LTE2OC42NTJsMzkuMTM3IDc4LjEyQzIzNC43NTIgMTU4LjMgMTgyLjQ2IDIwNS43MiAxNDUuNDU1IDI2NC40MSAxMDcuNDYgMzI0LjY3IDg3LjM3NSAzOTQuMzc4IDg3LjM3NSA0NjZjMCAyMDguNzc0IDE2OS44NTMgMzc4LjYyNiAzNzguNjI2IDM3OC42MjZTODQ0LjYyNyA2NzQuNzc0IDg0NC42MjcgNDY2YzAtNzEuNjItMjAuMDg0LTE0MS4zMy01OC4wNzctMjAxLjU5LTM3LjAwOC01OC42OS04OS4zLTEwNi4xMS0xNTEuMjIzLTEzNy4xMzNsMzkuMTM3LTc4LjEyYzc2LjE3MyAzOC4xNiAxNDAuNDkgOTYuNDggMTg1Ljk5NiAxNjguNjVDOTA3LjI2MiAyOTIuMDQgOTMyLjAwMiAzNzcuODY0IDkzMi4wMDIgNDY2YzAgMTI0LjQ3My00OC40NzMgMjQxLjQ5NS0xMzYuNDg3IDMyOS41MTNDNzA3LjQ5NyA4ODMuNTI3IDU5MC40NzUgOTMyIDQ2Ni4wMDIgOTMyeiIvPjwvc3ZnPg==);\n}\n\n@-webkit-keyframes ptr-spin {\n  from {\n    -webkit-transform: translate3d(0, 0, 0) rotate(0deg);\n  }\n  to {\n    -webkit-transform: translate3d(0, 0, 0) rotate(360deg);\n  }\n}\n", ""]);
 	
 	// exports
 
@@ -466,7 +466,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".iscroll-handlebar {\n  position: absolute;\n  right: 0px;\n  top: 0px;\n  transition: background-color 0.2s ease-out, transform 0.1s ease-out,width 0.1s ease-out, height 0.1s ease-out;\n  width: 4px;\n  border-radius: 2px;\n  background-color: rgba(0, 0, 0, 0);\n  z-index: 9999;\n  height: 0px;\n}\n", ""]);
+	exports.push([module.id, ".iscroll-handlebar {\n  position: absolute;\n  right: 1px;\n  top: 0px;\n  -webkit-transition: background-color 0.2s ease-out, -webkit-transform 0.1s ease-out,width 0.1s ease-out, height 0.1s ease-out;\n  transition: background-color 0.2s ease-out, transform 0.1s ease-out,width 0.1s ease-out, height 0.1s ease-out;\n  width: 2px;\n  border-radius: 1px;\n  background-color: rgba(0, 0, 0, 0);\n  z-index: 9999;\n  height: 0px;\n}\n", ""]);
 	
 	// exports
 
@@ -593,49 +593,38 @@
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(9)
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var detect = __webpack_require__(10)
+	var detect = __webpack_require__(9)
 	var touchAction = detect.touchAction
 	var transform = detect.transform
 	var has3d = detect.has3d
-	var computedStyle = __webpack_require__(16)
-	var Emitter = __webpack_require__(17)
-	var events = __webpack_require__(18)
-	var Tween = __webpack_require__(24)
-	var raf = __webpack_require__(28)
-	var throttle = __webpack_require__(29)
-	var Handlebar = __webpack_require__(30)
+	var Emitter = __webpack_require__(15)
+	var events = __webpack_require__(16)
+	var Tween = __webpack_require__(22)
+	var raf = __webpack_require__(26)
+	var throttle = __webpack_require__(27)
+	var Handlebar = __webpack_require__(28)
 	var max = Math.max
 	var min = Math.min
 	var now = Date.now
 	
 	var defineProperty = Object.defineProperty
 	
-	function lastVisible(el) {
-	  var nodes = el.childNodes
-	  for(var i = nodes.length - 1; i >=0; i --) {
-	    var node = nodes[i]
-	    if (node.nodeType === 1 && computedStyle(node, 'display') !== 'none') {
-	      return node
-	    }
-	  }
-	}
-	
+	/**
+	 * Create custom event
+	 *
+	 * @param {String} name
+	 * @return {Event}
+	 * @api private
+	 */
 	function customEvent(name) {
 	  var e
 	  try {
 	    e = new CustomEvent(name)
-	  } catch(error) {
+	  } catch (error) {
 	    try {
 	      e = document.createEvent('CustomEvent')
 	      e.initCustomEvent(name, false, false, 0)
-	    } catch(err) {
+	    } catch (err) {
 	      return
 	    }
 	  }
@@ -643,7 +632,7 @@
 	}
 	
 	/**
-	 * Init iscroll with el and options
+	 * Init iscroll with el and optional options
 	 * options.handlebar show handlebar if is true
 	 *
 	 * @param  {Element}  el
@@ -651,7 +640,7 @@
 	 * @api public
 	 */
 	function Iscroll(el, opts) {
-	  if (! (this instanceof Iscroll)) return new Iscroll(el, opts)
+	  if (!(this instanceof Iscroll)) return new Iscroll(el, opts)
 	  this.y = 0
 	  this.scrollable = el
 	  el.style.overflow = 'hidden'
@@ -666,19 +655,20 @@
 	  var self = this
 	  if (defineProperty) {
 	    defineProperty(this.scrollable, 'scrollTop', {
-	      set: function (v) {
-	        return self.scrollTo(-v, 200)
+	      set: function(v) {
+	        return self.scrollTo(-v, 400)
 	      },
-	      get: function () {
-	        return - self.y
+	      get: function() {
+	        return -self.y
 	      }
 	    })
 	  }
-	  this.on('scroll', function () {
+	  this.on('scroll', function() {
 	    var e = customEvent('scroll')
 	    if (e) el.dispatchEvent(e)
 	  })
 	  opts = opts || {}
+	  this.max = opts.max || 80
 	  if (opts.handlebar) {
 	    this.handlebar = new Handlebar(el)
 	  }
@@ -689,33 +679,43 @@
 	
 	Emitter(Iscroll.prototype)
 	
-	Iscroll.prototype.bind = function () {
-	  this.events = events(this.el, this)
+	/**
+	 * Bind events
+	 *
+	 * @api private
+	 */
+	Iscroll.prototype.bind = function() {
+	  this.events = events(this.scrollable, this)
 	  this.docEvents = events(document, this)
 	
-	   // W3C touch events
+	  // W3C touch events
 	  this.events.bind('touchstart')
 	  this.events.bind('touchmove')
+	  this.events.bind('touchleave', 'ontouchend')
 	  this.docEvents.bind('touchend')
 	  this.docEvents.bind('touchcancel', 'ontouchend')
 	}
 	
 	/**
-	 * recalculate height
+	 * Recalculate the height
 	 *
 	 * @api public
 	 */
-	Iscroll.prototype.refresh = function () {
-	  var child = lastVisible(this.el)
-	  this.viewHeight = parseInt(computedStyle(this.scrollable, 'height'), 10)
-	  var cb = child.getBoundingClientRect().bottom
-	  var b = this.el.getBoundingClientRect().bottom
-	  var h = parseInt(computedStyle(this.el, 'height'), 10)
-	  this.height = h + (cb - b)
-	  this.el.style.height = this.height + 'px'
+	Iscroll.prototype.refresh = function() {
+	  this.viewHeight = this.scrollable.getBoundingClientRect().height
+	  this.height = this.el.getBoundingClientRect().height
+	  this.minY = min(0, this.viewHeight - this.height)
+	  if (this.y < this.minY) {
+	    this.scrollTo(this.minY, 200)
+	  }
 	}
 	
-	Iscroll.prototype.unbind = function () {
+	/**
+	 * Unbind all event listeners, and remove handlebar if necessary
+	 *
+	 * @api public
+	 */
+	Iscroll.prototype.unbind = function() {
 	  this.off()
 	  this.events.unbind()
 	  this.docEvents.unbind()
@@ -724,89 +724,118 @@
 	  if (this.handlebar) this.scrollable.removeChild(this.handlebar.el)
 	}
 	
-	Iscroll.prototype.restrict = function (y) {
-	  y = min(y , 80)
-	  var h = Math.max(this.height, this.viewHeight)
-	  y = max(y , this.viewHeight - h - 80)
-	  return y
-	}
 	
-	Iscroll.prototype.ontouchstart = function (e) {
+	/**
+	 * touchstart event handler
+	 *
+	 * @param  {Event}  e
+	 * @api private
+	 */
+	Iscroll.prototype.ontouchstart = function(e) {
 	  this.speed = null
-	  this.leftright = null
 	  if (this.tween) this.tween.stop()
-	  this.dy = 0
-	  this.ts = now()
-	  if (this.handlebar) this.resizeHandlebar()
+	  this.refresh()
+	  var start = this.y
+	  if (e.target === this.scrollable) {
+	    start = min(start, 0)
+	    start = max(start, this.minY)
+	      // fix the invalid start position
+	    if (start !== this.y) return this.scrollTo(start, 200)
+	    return
+	  }
 	
 	  var touch = this.getTouch(e)
-	  this.clientY = touch.clientY
-	  this.down = {
-	    x: touch.clientX,
-	    y: touch.clientY,
-	    start: this.y,
-	    at: now()
+	  var sx = touch.clientX
+	  var sy = touch.clientY
+	  var at = now()
+	
+	
+	  this.onstart = function(x, y) {
+	    // no moved up and down, so don't know
+	    if (sy === y) return
+	    this.onstart = null
+	    var dx = Math.abs(x - sx)
+	    var dy = Math.abs(y - sy)
+	      // move left and right
+	    if (dx > dy) return
+	    this.clientY = touch.clientY
+	    this.dy = 0
+	    this.ts = now()
+	    this.down = {
+	      x: sx,
+	      y: sy,
+	      start: start,
+	      at: at
+	    }
+	    if (this.handlebar) this.resizeHandlebar()
+	    this.emit('start', this.y)
+	    return true
 	  }
 	}
 	
-	Iscroll.prototype.ontouchmove = function (e) {
+	/**
+	 * touchmove event handler
+	 *
+	 * @param  {Event}  e
+	 * @api private
+	 */
+	Iscroll.prototype.ontouchmove = function(e) {
 	  e.preventDefault()
-	  // do nothing if left right move
-	  if (e.touches.length > 1 || !this.down || this.leftright) return
+	  if (!this.down && !this.onstart) return
 	  var touch = this.getTouch(e)
-	  var down = this.down
-	  var dy = this.dy = touch.clientY - down.y
-	  var dx = touch.clientX - down.x
-	  // can not determine
-	  if (dx === 0 && dy === 0) return
-	  // determine dy and the slope
-	  if (null == this.leftright) {
-	    // no move if contentHeight < viewHeight and move up
-	    if (this.height <= this.viewHeight && dy < 0) return
-	    var slope = dx / dy
-	    // if is greater than 1 or -1, we're swiping up/down
-	    if (slope > 1 || slope < -1) {
-	      this.leftright = true
-	      if (this.handlebar) this.hideHandlebar()
-	      return
-	    } else {
-	      this.leftright = false
-	    }
+	  var x = touch.clientX
+	  var y = touch.clientY
+	  if (this.onstart) {
+	    var started = this.onstart(x, y)
+	    if (started !== true) return
 	  }
+	  var down = this.down
+	  var dy = this.dy = y - down.y
 	
 	  //calculate speed every 100 milisecond
-	  this.calcuteSpeed(touch.clientY)
+	  this.calcuteSpeed(touch.clientY, down.at)
 	  var start = this.down.start
-	  var dest = this.restrict(start + dy)
+	  var dest = start + dy
+	  dest = min(dest, this.max)
+	  dest = max(dest, this.minY - this.max)
 	  this.translate(dest)
 	}
 	
-	Iscroll.prototype.calcuteSpeed = function (y) {
+	/**
+	 * Calcute speed by clientY
+	 *
+	 * @param {Number} y
+	 * @api priavte
+	 */
+	Iscroll.prototype.calcuteSpeed = function(y, start) {
 	  var ts = now()
 	  var dt = ts - this.ts
-	  if (ts - this.down.at < 100) {
+	  if (ts - start < 100) {
 	    this.distance = y - this.clientY
-	    this.speed = Math.abs(this.distance/dt)
-	  } else if(dt > 100){
+	    this.speed = Math.abs(this.distance / dt)
+	  } else if (dt > 100) {
 	    this.distance = y - this.clientY
-	    this.speed = Math.abs(this.distance/dt)
+	    this.speed = Math.abs(this.distance / dt)
 	    this.ts = ts
 	    this.clientY = y
 	  }
 	}
 	
-	Iscroll.prototype.ontouchend = function (e) {
-	  if (!this.down || this.leftright) return
-	  if (this.height <= this.viewHeight && this.dy < 0) {
-	    if(this.handlebar) this.handlebar.hide()
-	    return
-	  }
+	/**
+	 * Event handler for touchend
+	 *
+	 * @param  {Event}  e
+	 * @api private
+	 */
+	Iscroll.prototype.ontouchend = function(e) {
+	  if (!this.down) return
+	  var at = this.down.at
+	  this.down = null
 	  var touch = this.getTouch(e)
-	  this.calcuteSpeed(touch.clientY)
+	  this.calcuteSpeed(touch.clientY, at)
 	  var m = this.momentum()
 	  this.scrollTo(m.dest, m.duration, m.ease)
 	  this.emit('release', this.y)
-	  this.down = null
 	}
 	
 	/**
@@ -815,27 +844,26 @@
 	 * @return {Object}
 	 * @api private
 	 */
-	Iscroll.prototype.momentum = function () {
-	  var deceleration = 0.0004
+	Iscroll.prototype.momentum = function() {
+	  var deceleration = 0.001
 	  var speed = this.speed
-	  speed = min(speed, 0.8)
-	  var destination = this.y + ( speed * speed ) / ( 2 * deceleration ) * ( this.distance < 0 ? -1 : 1 )
+	  speed = min(speed, 2)
+	  var y = this.y
+	  var rate = (4 - Math.PI)/2
+	  var destination = y + rate * (speed * speed) / (2 * deceleration) * (this.distance < 0 ? -1 : 1)
 	  var duration = speed / deceleration
-	  var newY, ease
-	  if (destination > 0) {
-	    newY = 0
-	    ease = 'out-back'
-	  } else if (destination < this.viewHeight - this.height) {
-	    newY = this.viewHeight - this.height
-	    ease = 'out-back'
-	  }
-	  if (typeof newY === 'number') {
-	    duration = duration*(newY - this.y + 160)/(destination - this.y)
-	    destination = newY
-	  }
-	  if (this.y > 0 || this.y < this.viewHeight - this.height) {
+	  var ease
+	  var minY = this.minY
+	  if (y > 0 || y < minY) {
 	    duration = 500
 	    ease = 'out-circ'
+	    destination = y > 0 ? 0 : minY
+	  } else if (destination > 0) {
+	    destination = 0
+	    ease = 'out-back'
+	  } else if (destination < minY) {
+	    destination = minY
+	    ease = 'out-back'
 	  }
 	  return {
 	    dest: destination,
@@ -845,30 +873,44 @@
 	}
 	
 	
-	Iscroll.prototype.scrollTo = function (y, duration, easing) {
+	/**
+	 * Scroll to potions y with optional duration and ease function
+	 *
+	 * @param {Number} y
+	 * @param {Number} duration
+	 * @param {String} easing
+	 * @api public
+	 */
+	Iscroll.prototype.scrollTo = function(y, duration, easing) {
 	  if (this.tween) this.tween.stop()
-	  var intransition = (duration > 0 && y !== this.y)
-	  if (!intransition) {
-	    this.onScrollEnd()
-	    return this.translate(y)
+	  var transition = (duration > 0 && y !== this.y)
+	  if (!transition) {
+	    this.translate(y)
+	    return this.onScrollEnd()
 	  }
 	
 	  easing = easing || 'out-cube'
-	  var tween = this.tween = Tween({y : this.y})
-	      .ease(easing)
-	      .to({y: y})
-	      .duration(duration)
+	  var tween = this.tween = Tween({
+	      y: this.y
+	    })
+	    .ease(easing)
+	    .to({
+	      y: y
+	    })
+	    .duration(duration)
 	
 	  var self = this
 	  tween.update(function(o) {
 	    self.translate(o.y)
 	  })
-	
-	  tween.on('end', function () {
-	    animate = function(){} // eslint-disable-line
-	    if (!tween.stopped) {
-	      self.onScrollEnd()
-	    }
+	  var promise = new Promise(function(resolve) {
+	    tween.on('end', function() {
+	      resolve()
+	      animate = function() {} // eslint-disable-line
+	      if (!tween.stopped) {
+	        self.onScrollEnd()
+	      }
+	    })
 	  })
 	
 	  function animate() {
@@ -877,15 +919,20 @@
 	  }
 	
 	  animate()
+	  return promise
 	}
 	
-	Iscroll.prototype.onScrollEnd = function () {
+	/**
+	 * Scrollend
+	 *
+	 * @api private
+	 */
+	Iscroll.prototype.onScrollEnd = function() {
 	  this.hideHandlebar()
-	  var top = this.y === 0
-	  var bottom = this.y === (this.viewHeight - this.height)
+	  var y = this.y
 	  this.emit('scrollend', {
-	    top: top,
-	    bottom: bottom
+	    top: y >= 0,
+	    bottom: y <= this.minY
 	  })
 	}
 	
@@ -896,7 +943,7 @@
 	 * @api private
 	 */
 	
-	Iscroll.prototype.getTouch = function(e){
+	Iscroll.prototype.getTouch = function(e) {
 	  // "mouse" and "Pointer" events just use the event object itself
 	  var touch = e
 	  if (e.changedTouches && e.changedTouches.length > 0) {
@@ -918,10 +965,10 @@
 	  var s = this.el.style
 	  if (isNaN(y)) return
 	  y = Math.floor(y)
-	  //reach the end
+	    //reach the end
 	  if (this.y !== y) {
 	    this.y = y
-	    this.emit('scroll', - y)
+	    this.emit('scroll', -y)
 	    if (this.handlebar) this.transformHandlebar()
 	  }
 	  if (has3d) {
@@ -937,19 +984,22 @@
 	 * @api private
 	 */
 	
-	Iscroll.prototype.touchAction = function(value){
+	Iscroll.prototype.touchAction = function(value) {
 	  var s = this.el.style
 	  if (touchAction) {
 	    s[touchAction] = value
 	  }
 	}
 	
-	Iscroll.prototype.transformHandlebar = throttle(function(){
+	/**
+	 * Transform handlebar
+	 *
+	 * @api private
+	 */
+	Iscroll.prototype.transformHandlebar = throttle(function() {
 	  var vh = this.viewHeight
 	  var h = this.height
-	  var bh = vh - vh * vh/h
-	  var ih = h - vh
-	  var y = parseInt(- bh * this.y/ih)
+	  var y = Math.round(-(vh - vh * vh / h) * this.y / (h - vh))
 	  this.handlebar.translateY(y)
 	}, 100)
 	
@@ -957,12 +1007,18 @@
 	 * show the handlebar and size it
 	 * @api public
 	 */
-	Iscroll.prototype.resizeHandlebar = function(){
-	  var h = this.viewHeight * this.viewHeight/this.height
+	Iscroll.prototype.resizeHandlebar = function() {
+	  var vh = this.viewHeight
+	  var h = vh * vh / this.height
 	  this.handlebar.resize(h)
 	}
 	
-	Iscroll.prototype.hideHandlebar = function () {
+	/**
+	 * Hide handlebar
+	 *
+	 * @api private
+	 */
+	Iscroll.prototype.hideHandlebar = function() {
 	  if (this.handlebar) this.handlebar.hide()
 	}
 	
@@ -970,30 +1026,30 @@
 
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports.transition = __webpack_require__(11)
+	exports.transition = __webpack_require__(10)
 	
-	exports.transform = __webpack_require__(12)
+	exports.transform = __webpack_require__(11)
 	
-	exports.touchAction = __webpack_require__(13)
+	exports.touchAction = __webpack_require__(12)
 	
-	exports.transitionend = __webpack_require__(14)
+	exports.transitionend = __webpack_require__(13)
 	
-	exports.has3d = __webpack_require__(15)
+	exports.has3d = __webpack_require__(14)
 
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports) {
 
 	var styles = [
-	  'transition',
 	  'webkitTransition',
 	  'MozTransition',
 	  'OTransition',
-	  'msTransition'
+	  'msTransition',
+	  'transition'
 	]
 	
 	var el = document.createElement('p')
@@ -1011,7 +1067,7 @@
 
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports) {
 
 	
@@ -1036,7 +1092,7 @@
 
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports) {
 
 	
@@ -1062,7 +1118,7 @@
 
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports) {
 
 	/**
@@ -1092,11 +1148,11 @@
 
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	var prop = __webpack_require__(12);
+	var prop = __webpack_require__(11);
 	
 	// IE <=8 doesn't have `getComputedStyle`
 	if (!prop || !window.getComputedStyle) {
@@ -1122,40 +1178,7 @@
 
 
 /***/ },
-/* 16 */
-/***/ function(module, exports) {
-
-	// DEV: We don't use var but favor parameters since these play nicer with minification
-	function computedStyle(el, prop, getComputedStyle, style) {
-	  getComputedStyle = window.getComputedStyle;
-	  style =
-	      // If we have getComputedStyle
-	      getComputedStyle ?
-	        // Query it
-	        // TODO: From CSS-Query notes, we might need (node, null) for FF
-	        getComputedStyle(el) :
-	
-	      // Otherwise, we are in IE and use currentStyle
-	        el.currentStyle;
-	  if (style) {
-	    return style
-	    [
-	      // Switch to camelCase for CSSOM
-	      // DEV: Grabbed from jQuery
-	      // https://github.com/jquery/jquery/blob/1.9-stable/src/css.js#L191-L194
-	      // https://github.com/jquery/jquery/blob/1.9-stable/src/core.js#L593-L597
-	      prop.replace(/-(\w)/gi, function (word, letter) {
-	        return letter.toUpperCase();
-	      })
-	    ];
-	  }
-	}
-	
-	module.exports = computedStyle;
-
-
-/***/ },
-/* 17 */
+/* 15 */
 /***/ function(module, exports) {
 
 	
@@ -1322,7 +1345,7 @@
 
 
 /***/ },
-/* 18 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -1330,8 +1353,8 @@
 	 * Module dependencies.
 	 */
 	
-	var events = __webpack_require__(19);
-	var delegate = __webpack_require__(20);
+	var events = __webpack_require__(17);
+	var delegate = __webpack_require__(18);
 	
 	/**
 	 * Expose `Events`.
@@ -1504,7 +1527,7 @@
 
 
 /***/ },
-/* 19 */
+/* 17 */
 /***/ function(module, exports) {
 
 	var bind = window.addEventListener ? 'addEventListener' : 'attachEvent',
@@ -1544,15 +1567,15 @@
 	};
 
 /***/ },
-/* 20 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 	
-	var closest = __webpack_require__(21)
-	  , event = __webpack_require__(19);
+	var closest = __webpack_require__(19)
+	  , event = __webpack_require__(17);
 	
 	/**
 	 * Delegate event `type` to `selector`
@@ -1592,14 +1615,14 @@
 
 
 /***/ },
-/* 21 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module Dependencies
 	 */
 	
-	var matches = __webpack_require__(22)
+	var matches = __webpack_require__(20)
 	
 	/**
 	 * Export `closest`
@@ -1630,14 +1653,14 @@
 
 
 /***/ },
-/* 22 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 	
-	var query = __webpack_require__(23);
+	var query = __webpack_require__(21);
 	
 	/**
 	 * Element prototype.
@@ -1682,7 +1705,7 @@
 
 
 /***/ },
-/* 23 */
+/* 21 */
 /***/ function(module, exports) {
 
 	function one(selector, el) {
@@ -1709,7 +1732,7 @@
 
 
 /***/ },
-/* 24 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -1717,10 +1740,10 @@
 	 * Module dependencies.
 	 */
 	
-	var Emitter = __webpack_require__(17);
-	var clone = __webpack_require__(25);
-	var type = __webpack_require__(26);
-	var ease = __webpack_require__(27);
+	var Emitter = __webpack_require__(15);
+	var clone = __webpack_require__(23);
+	var type = __webpack_require__(24);
+	var ease = __webpack_require__(25);
 	
 	/**
 	 * Expose `Tween`.
@@ -1892,7 +1915,7 @@
 	};
 
 /***/ },
-/* 25 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1901,9 +1924,9 @@
 	
 	var type;
 	try {
-	  type = __webpack_require__(26);
+	  type = __webpack_require__(24);
 	} catch (_) {
-	  type = __webpack_require__(26);
+	  type = __webpack_require__(24);
 	}
 	
 	/**
@@ -1955,7 +1978,7 @@
 
 
 /***/ },
-/* 26 */
+/* 24 */
 /***/ function(module, exports) {
 
 	/**
@@ -1995,7 +2018,7 @@
 
 
 /***/ },
-/* 27 */
+/* 25 */
 /***/ function(module, exports) {
 
 	
@@ -2171,7 +2194,7 @@
 
 
 /***/ },
-/* 28 */
+/* 26 */
 /***/ function(module, exports) {
 
 	/**
@@ -2211,7 +2234,7 @@
 
 
 /***/ },
-/* 29 */
+/* 27 */
 /***/ function(module, exports) {
 
 	module.exports = throttle;
@@ -2249,10 +2272,10 @@
 
 
 /***/ },
-/* 30 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var detect = __webpack_require__(10)
+	var detect = __webpack_require__(9)
 	var has3d = detect.has3d
 	var transform = detect.transform
 	
@@ -2278,7 +2301,7 @@
 	handlebar.prototype.resize = function (h) {
 	  var s = this.el.style
 	  s.height = h + 'px'
-	  s.backgroundColor = 'rgba(0,0,0,0.3)'
+	  s.backgroundColor = 'rgba(0,0,0,0.4)'
 	}
 	
 	/**
@@ -2309,13 +2332,13 @@
 
 
 /***/ },
-/* 31 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var classes = __webpack_require__(32)
+	var classes = __webpack_require__(30)
 	var domify = __webpack_require__(7)
-	var once = __webpack_require__(34)
-	var template = __webpack_require__(36)
+	var once = __webpack_require__(32)
+	var template = __webpack_require__(34)
 	
 	var LOADING_TEXT = '加载中...'
 	var PULL_TEXT = '下拉刷新'
@@ -2329,6 +2352,18 @@
 	  }
 	}
 	
+	/**
+	 * `el` the scrollable element
+	 * `callback` is called when loading start, the first argument which is a callback function should be called after the dom prepend to the list.
+	 * `option` object could contain `PULL_TEXT` `RELEASE_TEXT` `LOADING_TEXT` and `timeout` for the request timeout in millisecond.
+	 * `option.template` contains a custom template(string or element) for the inserted element
+	 * `option.timeout` millisecond of request timeout, default `10000`
+	 *
+	 * @param  {Element}  el
+	 * @param  {Object} opt
+	 * @param  {Function}  fn
+	 * @api public
+	 */
 	module.exports = function PTR(el, opt, fn) {
 	  if (!(this instanceof PTR)) return new PTR(el, opt, fn)
 	  if (typeof opt === 'function') {
@@ -2342,7 +2377,16 @@
 	  this.timeout = opt.timeout || 10000
 	  var start
 	  var loading
-	  var box = domify(template)
+	  var box
+	  var tel = opt.template
+	  // custom template
+	  if (typeof tel === 'string') {
+	    box = domify(template)
+	  } else if (tel && tel.nodeType) {
+	    box = opt.template
+	  } else {
+	    box = domify(template)
+	  }
 	  var first = el.firstElementChild
 	  if (first) {
 	    prepend(first, box)
@@ -2376,6 +2420,12 @@
 	    imgEl.className = 'ptr_image'
 	  }
 	
+	  /**
+	   * Refresh for more data
+	   *
+	   * @param  {Event}  event
+	   * @api public
+	   */
 	  var refresh = this.refresh = function (e) {
 	      if (e) e.stopImmediatePropagation()
 	      el.scrollTop = -40
@@ -2401,6 +2451,12 @@
 	  }
 	  document.addEventListener('touchend', end)
 	
+	  /**
+	   * Unbind event listener and remove inserted element
+	   *
+	   * @return {undefined}
+	   * @api public
+	   */
 	  this.unbind = function () {
 	    el.removeEventListener('scroll', onscroll)
 	    document.removeEventListener('touchend', end)
@@ -2409,14 +2465,14 @@
 
 
 /***/ },
-/* 32 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 	
-	var index = __webpack_require__(33);
+	var index = __webpack_require__(31);
 	
 	/**
 	 * Whitespace regexp.
@@ -2602,7 +2658,7 @@
 
 
 /***/ },
-/* 33 */
+/* 31 */
 /***/ function(module, exports) {
 
 	module.exports = function(arr, obj){
@@ -2614,10 +2670,10 @@
 	};
 
 /***/ },
-/* 34 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var wrappy = __webpack_require__(35)
+	var wrappy = __webpack_require__(33)
 	module.exports = wrappy(once)
 	
 	once.proto = once(function () {
@@ -2641,7 +2697,7 @@
 
 
 /***/ },
-/* 35 */
+/* 33 */
 /***/ function(module, exports) {
 
 	// Returns a wrapper function that returns a wrapped callback
@@ -2680,7 +2736,7 @@
 
 
 /***/ },
-/* 36 */
+/* 34 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ptr_box\">\n  <div class=\"ptr_container\">\n    <div class=\"ptr_image\"></div>\n    <div class=\"ptr_text\">下拉刷新</div>\n  </div>\n</div>\n";
