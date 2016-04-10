@@ -198,7 +198,7 @@ describe('scroll', function () {
     var t = Touch(li, {speed: 200})
     return t.moveDown(60).then(function () {
       ptr.unbind()
-      return t.wait(220)
+      return t.wait(500)
     }).then(function () {
       assert.equal(scrollable.scrollTop, 0)
     })
