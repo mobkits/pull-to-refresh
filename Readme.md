@@ -12,11 +12,8 @@
   [demo](http://chemzqm.github.io/pull-to-refresh).
   [code of demo](https://github.com/chemzqm/pull-to-refresh/blob/gh-pages/index.js)
 
-  Tip: Avoid to use transition when dragging.
-
 ## Features
 
-* optional options for setting texts and timeout.
 * call refresh as you need.
 * simplified code and API.
 
@@ -71,7 +68,7 @@ You can think iscroll just add nagetive scrollTop value to the scrollable.
 
 * `el` the scrollable element
 * `callback` is called when loading start, the first argument which is a callback function should be called after the dom prepend to the list.
-* `option` object could contain `PULL_TEXT` `RELEASE_TEXT` `LOADING_TEXT` and `timeout` for the request timeout in millisecond.
+* `option.timeout` for the request timeout in millisecond.
 * `option.template` contains a custom template(string or element) for the inserted element
 * `option.timeout` millisecond of request timeout, default `10000`
 
