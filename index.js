@@ -3,10 +3,6 @@ var domify = require('domify')
 var once = require('once')
 var template = require('./template.html')
 
-var LOADING_TEXT = '加载中...'
-var PULL_TEXT = '下拉刷新'
-var RELEASE_TEXT = '释放更新'
-
 function prepend(parentNode, node) {
   if (parentNode.firstChild) {
     parentNode.insertBefore(node, parentNode.firstChild)
@@ -18,7 +14,6 @@ function prepend(parentNode, node) {
 /**
  * `el` the scrollable element
  * `callback` is called when loading start, the first argument which is a callback function should be called after the dom prepend to the list.
- * `option` object could contain `PULL_TEXT` `RELEASE_TEXT` `LOADING_TEXT` and `timeout` for the request timeout in millisecond.
  * `option.template` contains a custom template(string or element) for the inserted element
  * `option.timeout` millisecond of request timeout, default `10000`
  *
@@ -34,9 +29,6 @@ module.exports = function PTR(el, opt, fn) {
     opt = {}
   }
   this.el = el
-  this.LOADING_TEXT = opt.LOADING_TEXT || LOADING_TEXT
-  this.PULL_TEXT = opt.PULL_TEXT || PULL_TEXT
-  this.RELEASE_TEXT = opt.RELEASE_TEXT || RELEASE_TEXT
   this.timeout = opt.timeout || 10000
   var start
   var loading
@@ -63,11 +55,9 @@ module.exports = function PTR(el, opt, fn) {
     if (loading) return
     var top = el.scrollTop
     if (top < 0 && top >= - 40) {
-      textEl.textContent = self.PULL_TEXT
     }
     if (top < -40) {
       classes(imgEl).add('ptr_rotate')
-      textEl.textContent = self.RELEASE_TEXT
       start = true
     } else {
       classes(imgEl).remove('ptr_rotate')
@@ -79,7 +69,6 @@ module.exports = function PTR(el, opt, fn) {
   function callback() {
     el.scrollTop = 0
     loading = false
-    textEl.textContent = self.PULL_TEXT
     imgEl.className = 'ptr_image'
   }
 
@@ -93,7 +82,6 @@ module.exports = function PTR(el, opt, fn) {
       if (e) e.stopImmediatePropagation()
       el.scrollTop = -40
       imgEl.className += ' ptr_loading'
-      textEl.textContent = self.LOADING_TEXT
       loading = true
       var timeout = setTimeout(callback, self.timeout)
       var cb = once(function () {

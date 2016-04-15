@@ -25,9 +25,9 @@ myConfig.devtool = 'sourcemap'
 myConfig.debug = true
 
 var paths = {
-  scripts: ['index.js', 'example/index.js'],
+  scripts: ['index.js', 'ptr.css', 'example/index.js'],
   // file list for watching
-  asserts: ['ptr.css', 'example/index.js', 'exmaple/*.css', 'example/index.html']
+  asserts: ['example/index.js', 'exmaple/*.css', 'example/index.html']
 }
 
 gulp.task('default', ['build-dev'])

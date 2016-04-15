@@ -74,13 +74,6 @@ describe('Ptr()', function() {
     assert.equal(ptr.el, scrollable)
   })
 
-  it('should init with options', function () {
-    var ptr = Ptr(scrollable, {LOADING_TEXT: 'loading'}, function () {
-    })
-    assert.equal(ptr.el, scrollable)
-    assert.equal(ptr.LOADING_TEXT, 'loading')
-  })
-
   it('should works with custom template', function () {
     var ptr = Ptr(scrollable, {template: template}, function () {
     })
@@ -95,39 +88,6 @@ describe('Ptr()', function() {
 })
 
 describe('scroll', function () {
-  it('should show pull text', function () {
-    var ptr = Ptr(scrollable, function () {})
-    Iscroll(scrollable)
-    var li = scrollable.querySelector('li')
-    var t = Touch(li, {speed: 200})
-    return t.moveDown(30).then(function () {
-      var tel = getElement('text')
-      assert.equal(tel.textContent, ptr.PULL_TEXT)
-    })
-  })
-  it('should show pull text', function () {
-    var ptr = Ptr(scrollable, function () {})
-    Iscroll(scrollable)
-    var li = scrollable.querySelector('li')
-    var t = Touch(li, {speed: 200})
-    return t.moveDown(50, false).then(function () {
-      var tel = getElement('text')
-      assert.equal(tel.textContent, ptr.RELEASE_TEXT)
-      ptr.unbind()
-    })
-  })
-
-  it('should show loading text on end', function () {
-    var ptr = Ptr(scrollable, function () {})
-    Iscroll(scrollable)
-    var li = scrollable.querySelector('li')
-    var t = Touch(li, {speed: 200})
-    return t.moveDown(60).then(function () {
-      var tel = getElement('text')
-      assert.equal(tel.textContent, ptr.LOADING_TEXT)
-      ptr.unbind()
-    })
-  })
 
   it('should not load after move up and down', function () {
     var fired = false
@@ -141,7 +101,6 @@ describe('scroll', function () {
       return t.moveUp(60)
     }).then(function () {
       var tel = getElement('text')
-      assert.equal(tel.textContent, ptr.PULL_TEXT)
       assert.equal(fired, false)
       ptr.unbind()
     })
@@ -163,7 +122,7 @@ describe('scroll', function () {
 
   it('should call loading function with option set', function () {
     var fired
-    var ptr = Ptr(scrollable, {LOADING_TEXT: 'loading'}, function () {
+    var ptr = Ptr(scrollable, function () {
       fired = true
     })
     Iscroll(scrollable)
@@ -184,7 +143,6 @@ describe('scroll', function () {
     var t = Touch(li, {speed: 200})
     return t.moveDown(60).then(function () {
       var tel = getElement('text')
-      assert.equal(tel.textContent , ptr.PULL_TEXT)
       ptr.unbind()
     })
   })
@@ -216,7 +174,6 @@ describe('.unbind()', function() {
     ptr.unbind()
     return t.moveDown(80).then(function () {
       var tel = getElement('text')
-      assert.equal(tel.textContent, ptr.PULL_TEXT)
     })
   })
 })
