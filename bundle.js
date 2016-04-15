@@ -116,7 +116,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".ptr_scrollable {\n  position: relative;\n  overflow-y: visible;\n  -webkit-overflow-scrolling: touch;\n}\n\n.ptr_box {\n  position: absolute;\n  top: -40px;\n  display: block;\n  height: 40px;\n  left: 0px;\n  right: 0;\n  overflow: hidden;\n}\n\n.ptr_box .ptr_container {\n  position: relative;\n  width: 120px;\n  margin: auto;\n  text-align: center;\n  height: 40px;\n  line-height: 40px;\n}\n\n.ptr_box .ptr_text {\n  font-size: 14px;\n}\n\n.ptr_box .ptr_image {\n  position: absolute;\n  top: 0px;\n  left: 12px;\n  height: 100%;\n  -webkit-transform: translate3d(0, 0, 0);\n  -webkit-transform-origin: center center;\n  -webkit-transition: -webkit-transform .2s linear;\n  transition: -webkit-transform .2s linear;\n  line-height: 40px;\n  width: 14px;\n  background-size: contain;\n  background-position: center;\n  background-repeat: no-repeat;\n  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDIwIDIwIj48cGF0aCBkPSJNOS44NTQgMTkuMzU0bDYtNmEuNS41IDAgMCAwLS43MDctLjcwN0wxMCAxNy43OTNWMS41YS41LjUgMCAwIDAtMSAwdjE2LjI5M2wtNS4xNDUtNS4xNDZhLjUuNSAwIDAgMC0uNzA3LjcwOGw2IDZhLjUuNSAwIDAgMCAuNzA3IDB6Ii8+PC9zdmc+);\n}\n\n.ptr_box .ptr_image.ptr_rotate {\n  -webkit-transform: translate3d(0, 0, 0) rotate(180deg);\n}\n\n.ptr_box .ptr_image.ptr_loading {\n  animation: ptr-spin 0.8s infinite linear;\n  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MzIiIGhlaWdodD0iOTMyIiB2aWV3Qm94PSIwIDAgOTMyIDkzMiI+PHBhdGggZD0iTTQ2NiA5MzJjLTEyNC40NzMgMC0yNDEuNDk1LTQ4LjQ3My0zMjkuNTEzLTEzNi40ODdDNDguNDczIDcwNy40OTUgMCA1OTAuNDczIDAgNDY2YzAtODguMTM4IDI0Ljc0LTE3My45NjIgNzEuNTQ0LTI0OC4xOTIgNDUuNTA4LTcyLjE3MiAxMDkuODIzLTEzMC40OSAxODUuOTk2LTE2OC42NTJsMzkuMTM3IDc4LjEyQzIzNC43NTIgMTU4LjMgMTgyLjQ2IDIwNS43MiAxNDUuNDU1IDI2NC40MSAxMDcuNDYgMzI0LjY3IDg3LjM3NSAzOTQuMzc4IDg3LjM3NSA0NjZjMCAyMDguNzc0IDE2OS44NTMgMzc4LjYyNiAzNzguNjI2IDM3OC42MjZTODQ0LjYyNyA2NzQuNzc0IDg0NC42MjcgNDY2YzAtNzEuNjItMjAuMDg0LTE0MS4zMy01OC4wNzctMjAxLjU5LTM3LjAwOC01OC42OS04OS4zLTEwNi4xMS0xNTEuMjIzLTEzNy4xMzNsMzkuMTM3LTc4LjEyYzc2LjE3MyAzOC4xNiAxNDAuNDkgOTYuNDggMTg1Ljk5NiAxNjguNjVDOTA3LjI2MiAyOTIuMDQgOTMyLjAwMiAzNzcuODY0IDkzMi4wMDIgNDY2YzAgMTI0LjQ3My00OC40NzMgMjQxLjQ5NS0xMzYuNDg3IDMyOS41MTNDNzA3LjQ5NyA4ODMuNTI3IDU5MC40NzUgOTMyIDQ2Ni4wMDIgOTMyeiIvPjwvc3ZnPg==);\n}\n\n@-webkit-keyframes ptr-spin {\n  from {\n    -webkit-transform: translate3d(0, 0, 0) rotate(0deg);\n  }\n  to {\n    -webkit-transform: translate3d(0, 0, 0) rotate(360deg);\n  }\n}\n", ""]);
+	exports.push([module.id, ".ptr_scrollable {\n  position: relative;\n  overflow-y: visible;\n  -webkit-overflow-scrolling: touch;\n}\n\n.ptr_box {\n  position: absolute;\n  top: -40px;\n  display: block;\n  height: 40px;\n  left: 0px;\n  right: 0;\n  overflow: hidden;\n}\n\n.ptr_box .ptr_container {\n  position: relative;\n  width: 40px;\n  margin: auto;\n  text-align: center;\n  height: 40px;\n  line-height: 40px;\n}\n\n.ptr_box .ptr_text {\n  font-size: 14px;\n}\n\n.ptr_box .ptr_image {\n  position: absolute;\n  top: 0px;\n  left: 12px;\n  height: 100%;\n  -webkit-transform: translate3d(0, 0, 0);\n  -webkit-transform-origin: center center;\n  -webkit-transition: -webkit-transform .2s linear;\n  transition: -webkit-transform .2s linear;\n  line-height: 40px;\n  width: 14px;\n  background-size: contain;\n  background-position: center;\n  background-repeat: no-repeat;\n  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDIwIDIwIj48cGF0aCBkPSJNOS44NTQgMTkuMzU0bDYtNmEuNS41IDAgMCAwLS43MDctLjcwN0wxMCAxNy43OTNWMS41YS41LjUgMCAwIDAtMSAwdjE2LjI5M2wtNS4xNDUtNS4xNDZhLjUuNSAwIDAgMC0uNzA3LjcwOGw2IDZhLjUuNSAwIDAgMCAuNzA3IDB6Ii8+PC9zdmc+);\n}\n\n.ptr_box .ptr_image.ptr_rotate {\n  -webkit-transform: translate3d(0, 0, 0) rotate(180deg);\n}\n\n.ptr_box .ptr_image.ptr_loading {\n  animation: ptr-spin 0.8s infinite linear;\n  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5MzIiIGhlaWdodD0iOTMyIiB2aWV3Qm94PSIwIDAgOTMyIDkzMiI+PHBhdGggZD0iTTQ2NiA5MzJjLTEyNC40NzMgMC0yNDEuNDk1LTQ4LjQ3My0zMjkuNTEzLTEzNi40ODdDNDguNDczIDcwNy40OTUgMCA1OTAuNDczIDAgNDY2YzAtODguMTM4IDI0Ljc0LTE3My45NjIgNzEuNTQ0LTI0OC4xOTIgNDUuNTA4LTcyLjE3MiAxMDkuODIzLTEzMC40OSAxODUuOTk2LTE2OC42NTJsMzkuMTM3IDc4LjEyQzIzNC43NTIgMTU4LjMgMTgyLjQ2IDIwNS43MiAxNDUuNDU1IDI2NC40MSAxMDcuNDYgMzI0LjY3IDg3LjM3NSAzOTQuMzc4IDg3LjM3NSA0NjZjMCAyMDguNzc0IDE2OS44NTMgMzc4LjYyNiAzNzguNjI2IDM3OC42MjZTODQ0LjYyNyA2NzQuNzc0IDg0NC42MjcgNDY2YzAtNzEuNjItMjAuMDg0LTE0MS4zMy01OC4wNzctMjAxLjU5LTM3LjAwOC01OC42OS04OS4zLTEwNi4xMS0xNTEuMjIzLTEzNy4xMzNsMzkuMTM3LTc4LjEyYzc2LjE3MyAzOC4xNiAxNDAuNDkgOTYuNDggMTg1Ljk5NiAxNjguNjVDOTA3LjI2MiAyOTIuMDQgOTMyLjAwMiAzNzcuODY0IDkzMi4wMDIgNDY2YzAgMTI0LjQ3My00OC40NzMgMjQxLjQ5NS0xMzYuNDg3IDMyOS41MTNDNzA3LjQ5NyA4ODMuNTI3IDU5MC40NzUgOTMyIDQ2Ni4wMDIgOTMyeiIvPjwvc3ZnPg==);\n}\n\n@-webkit-keyframes ptr-spin {\n  from {\n    -webkit-transform: translate3d(0, 0, 0) rotate(0deg);\n  }\n  to {\n    -webkit-transform: translate3d(0, 0, 0) rotate(360deg);\n  }\n}\n", ""]);
 	
 	// exports
 
@@ -2340,10 +2340,6 @@
 	var once = __webpack_require__(32)
 	var template = __webpack_require__(34)
 	
-	var LOADING_TEXT = '加载中...'
-	var PULL_TEXT = '下拉刷新'
-	var RELEASE_TEXT = '释放更新'
-	
 	function prepend(parentNode, node) {
 	  if (parentNode.firstChild) {
 	    parentNode.insertBefore(node, parentNode.firstChild)
@@ -2355,7 +2351,6 @@
 	/**
 	 * `el` the scrollable element
 	 * `callback` is called when loading start, the first argument which is a callback function should be called after the dom prepend to the list.
-	 * `option` object could contain `PULL_TEXT` `RELEASE_TEXT` `LOADING_TEXT` and `timeout` for the request timeout in millisecond.
 	 * `option.template` contains a custom template(string or element) for the inserted element
 	 * `option.timeout` millisecond of request timeout, default `10000`
 	 *
@@ -2371,9 +2366,6 @@
 	    opt = {}
 	  }
 	  this.el = el
-	  this.LOADING_TEXT = opt.LOADING_TEXT || LOADING_TEXT
-	  this.PULL_TEXT = opt.PULL_TEXT || PULL_TEXT
-	  this.RELEASE_TEXT = opt.RELEASE_TEXT || RELEASE_TEXT
 	  this.timeout = opt.timeout || 10000
 	  var start
 	  var loading
@@ -2400,11 +2392,9 @@
 	    if (loading) return
 	    var top = el.scrollTop
 	    if (top < 0 && top >= - 40) {
-	      textEl.textContent = self.PULL_TEXT
 	    }
 	    if (top < -40) {
 	      classes(imgEl).add('ptr_rotate')
-	      textEl.textContent = self.RELEASE_TEXT
 	      start = true
 	    } else {
 	      classes(imgEl).remove('ptr_rotate')
@@ -2416,7 +2406,6 @@
 	  function callback() {
 	    el.scrollTop = 0
 	    loading = false
-	    textEl.textContent = self.PULL_TEXT
 	    imgEl.className = 'ptr_image'
 	  }
 	
@@ -2430,7 +2419,6 @@
 	      if (e) e.stopImmediatePropagation()
 	      el.scrollTop = -40
 	      imgEl.className += ' ptr_loading'
-	      textEl.textContent = self.LOADING_TEXT
 	      loading = true
 	      var timeout = setTimeout(callback, self.timeout)
 	      var cb = once(function () {
@@ -2739,7 +2727,7 @@
 /* 34 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"ptr_box\">\n  <div class=\"ptr_container\">\n    <div class=\"ptr_image\"></div>\n    <div class=\"ptr_text\">下拉刷新</div>\n  </div>\n</div>\n";
+	module.exports = "<div class=\"ptr_box\">\n  <div class=\"ptr_container\">\n    <div class=\"ptr_image\"></div>\n  </div>\n</div>\n";
 
 /***/ }
 /******/ ]);
