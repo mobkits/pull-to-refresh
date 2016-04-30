@@ -1,6 +1,6 @@
 {
   "name": "pull-to-refresh",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "no jquey simplified pull to refresh component",
   "main": "index.js",
   "scripts": {
@@ -29,7 +29,6 @@
     "component-classes": "^1.2.4",
     "component-events": "^1.0.9",
     "domify": "^1.4.0",
-    "iscroll-component": "^1.5.0",
     "once": "^1.3.2"
   },
   "style": "./ptr.css",
@@ -42,7 +41,7 @@
     "gulp-serve": "^1.2.0",
     "gulp-util": "^3.0.7",
     "html-loader": "^0.4.0",
-    "iscroll-component": "^1.1.1",
+    "iscroll-component": "^1.5.0",
     "istanbul": "^0.4.0",
     "istanbul-instrumenter-loader": "^0.2.0",
     "karma": "^0.13.15",
