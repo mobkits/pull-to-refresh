@@ -14,8 +14,9 @@
 
 ## Features
 
-* call refresh as you need.
-* simplified code and API.
+* Call refresh as you need.
+* Simplified code and API.
+* Works with promise
 
 ## Installation
 
@@ -48,18 +49,19 @@
   </div>
 </div>
 ```
-Notice the scrollable have a single child for [iscroll-component](https://github.com/chemzqm/iscroll) to work
+
+Notice the scrollable **must** have a single child for [iscroll-component](https://github.com/chemzqm/iscroll) to work
 
 ``` js
 var el = document.getElementById('demo')
 var Ptr = require('pull-to-refresh')
 var is = Iscroll(el, { handlebar: true })
-var ptr = new Ptr(el, function(cb) {
-    ajax_and_prepend_dom( )//load your data and append them to the list
-    cb() //You can use the callback or return a promise
+var ptr = new Ptr(el, function() {
+    return ajax_and_prepend_dom( ) // refresh your data, should return promise
   })
 })
 ```
+
 You can think iscroll just add nagetive scrollTop value to the scrollable.
 
 ## API
