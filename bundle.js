@@ -48,7 +48,7 @@
 	__webpack_require__(5)
 	var domify = __webpack_require__(7)
 	var Iscroll = __webpack_require__(8)
-	var Ptr = __webpack_require__(29)
+	var Ptr = __webpack_require__(37)
 	
 	var el = document.getElementById('scrollable')
 	var list = el.querySelector('.content')
@@ -593,19 +593,23 @@
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var detect = __webpack_require__(9)
+	var height = __webpack_require__(9)
+	var detect = __webpack_require__(11)
+	var Emitter = __webpack_require__(17)
+	var events = __webpack_require__(18)
+	var Tween = __webpack_require__(24)
+	var raf = __webpack_require__(28)
+	var throttle = __webpack_require__(29)
+	var debounce = __webpack_require__(30)
+	var Handlebar = __webpack_require__(32)
+	var wheel = __webpack_require__(33)
 	var touchAction = detect.touchAction
 	var transform = detect.transform
 	var has3d = detect.has3d
-	var Emitter = __webpack_require__(15)
-	var events = __webpack_require__(16)
-	var Tween = __webpack_require__(22)
-	var raf = __webpack_require__(26)
-	var throttle = __webpack_require__(27)
-	var Handlebar = __webpack_require__(28)
 	var max = Math.max
 	var min = Math.min
 	var now = Date.now
+	var hasTouch = __webpack_require__(36)
 	
 	var defineProperty = Object.defineProperty
 	
@@ -650,7 +654,7 @@
 	  }
 	  this.el = children[0]
 	  this.touchAction('none')
-	  this.refresh()
+	  this.refresh(true)
 	  this.bind()
 	  var self = this
 	  if (defineProperty) {
@@ -694,6 +698,8 @@
 	  this.events.bind('touchleave', 'ontouchend')
 	  this.docEvents.bind('touchend')
 	  this.docEvents.bind('touchcancel', 'ontouchend')
+	
+	  if (!hasTouch) this._wheelHandler = wheel(this.scrollable, this.onwheel.bind(this), true)
 	}
 	
 	/**
@@ -701,12 +707,22 @@
 	 *
 	 * @api public
 	 */
-	Iscroll.prototype.refresh = function() {
-	  this.viewHeight = this.scrollable.getBoundingClientRect().height
-	  this.height = this.el.getBoundingClientRect().height
-	  this.minY = min(0, this.viewHeight - this.height)
+	Iscroll.prototype.refresh = function(noscroll) {
+	  var vh = this.viewHeight = this.scrollable.getBoundingClientRect().height
+	  var ch = this.el.getBoundingClientRect().height
+	  var h = Math.max(vh, height(this.el))
+	  if (ch !== h) {
+	    this.el.style.height = h + 'px'
+	    this.height = h
+	  } else {
+	    this.height = h
+	  }
+	  this.minY = min(0, vh - this.height)
+	  if (noscroll === true) return
 	  if (this.y < this.minY) {
-	    this.scrollTo(this.minY, 200)
+	    this.scrollTo(this.minY, 300)
+	  } else if (this.y > 0) {
+	    this.scrollTo(0, 300)
 	  }
 	}
 	
@@ -721,8 +737,19 @@
 	  this.docEvents.unbind()
 	  window.removeEventListener('orientationchange', this._refresh, false)
 	  window.removeEventListener('resize', this._refresh, false)
+	  if (this._wheelHandler) this.scrollable.removeEventListener('wheel', this._wheelHandler)
 	  if (this.handlebar) this.scrollable.removeChild(this.handlebar.el)
 	}
+	
+	Iscroll.prototype.onwheel = throttle(function (dx, dy) {
+	  if (Math.abs(dx) > Math.abs(dy)) return
+	  if (this.handlebar) this.resizeHandlebar()
+	  var y = this.y - dy
+	  if (y > 0) y = 0
+	  if (y < this.minY) y = this.minY
+	  if (y === this.y) return
+	  this.scrollTo(y, 16, 'linear')
+	})
 	
 	
 	/**
@@ -734,7 +761,7 @@
 	Iscroll.prototype.ontouchstart = function(e) {
 	  this.speed = null
 	  if (this.tween) this.tween.stop()
-	  this.refresh()
+	  this.refresh(true)
 	  var start = this.y
 	  if (e.target === this.scrollable) {
 	    start = min(start, 0)
@@ -927,14 +954,14 @@
 	 *
 	 * @api private
 	 */
-	Iscroll.prototype.onScrollEnd = function() {
+	Iscroll.prototype.onScrollEnd = debounce(function() {
 	  this.hideHandlebar()
 	  var y = this.y
 	  this.emit('scrollend', {
 	    top: y >= 0,
 	    bottom: y <= this.minY
 	  })
-	}
+	}, 100)
 	
 	/**
 	 * Gets the appropriate "touch" object for the `e` event. The event may be from
@@ -1029,19 +1056,89 @@
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports.transition = __webpack_require__(10)
+	var computedStyle = __webpack_require__(10)
 	
-	exports.transform = __webpack_require__(11)
+	/**
+	 * Find last visible element
+	 *
+	 * @param  {Element}  el
+	 * @return {Element}
+	 */
+	function lastVisible(el) {
+	  var nodes = el.childNodes
+	  for(var i = nodes.length - 1; i >=0; i --) {
+	    var node = nodes[i]
+	    if (node.nodeType === 1 && computedStyle(node, 'display') !== 'none') {
+	      return node
+	    }
+	  }
+	}
 	
-	exports.touchAction = __webpack_require__(12)
+	function height(node) {
+	  var child = lastVisible(node)
+	  var pb = parseInt(computedStyle(node, 'paddingBottom'), 10)
+	  var pt = parseInt(computedStyle(node, 'paddingTop'), 10)
+	  if (!child) return pb + pt
+	  var mb = pb ? parseInt(computedStyle(child, 'marginBottom'), 10) : 0
+	  var cb = child.getBoundingClientRect().bottom
+	  var r = node.getBoundingClientRect()
+	  var res = r.height + (cb - r.bottom) + mb + pb
+	  return res
+	}
 	
-	exports.transitionend = __webpack_require__(13)
-	
-	exports.has3d = __webpack_require__(14)
+	module.exports = height
 
 
 /***/ },
 /* 10 */
+/***/ function(module, exports) {
+
+	// DEV: We don't use var but favor parameters since these play nicer with minification
+	function computedStyle(el, prop, getComputedStyle, style) {
+	  getComputedStyle = window.getComputedStyle;
+	  style =
+	      // If we have getComputedStyle
+	      getComputedStyle ?
+	        // Query it
+	        // TODO: From CSS-Query notes, we might need (node, null) for FF
+	        getComputedStyle(el) :
+	
+	      // Otherwise, we are in IE and use currentStyle
+	        el.currentStyle;
+	  if (style) {
+	    return style
+	    [
+	      // Switch to camelCase for CSSOM
+	      // DEV: Grabbed from jQuery
+	      // https://github.com/jquery/jquery/blob/1.9-stable/src/css.js#L191-L194
+	      // https://github.com/jquery/jquery/blob/1.9-stable/src/core.js#L593-L597
+	      prop.replace(/-(\w)/gi, function (word, letter) {
+	        return letter.toUpperCase();
+	      })
+	    ];
+	  }
+	}
+	
+	module.exports = computedStyle;
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports.transition = __webpack_require__(12)
+	
+	exports.transform = __webpack_require__(13)
+	
+	exports.touchAction = __webpack_require__(14)
+	
+	exports.transitionend = __webpack_require__(15)
+	
+	exports.has3d = __webpack_require__(16)
+
+
+/***/ },
+/* 12 */
 /***/ function(module, exports) {
 
 	var styles = [
@@ -1067,7 +1164,7 @@
 
 
 /***/ },
-/* 11 */
+/* 13 */
 /***/ function(module, exports) {
 
 	
@@ -1092,7 +1189,7 @@
 
 
 /***/ },
-/* 12 */
+/* 14 */
 /***/ function(module, exports) {
 
 	
@@ -1118,7 +1215,7 @@
 
 
 /***/ },
-/* 13 */
+/* 15 */
 /***/ function(module, exports) {
 
 	/**
@@ -1148,11 +1245,11 @@
 
 
 /***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	var prop = __webpack_require__(11);
+	var prop = __webpack_require__(13);
 	
 	// IE <=8 doesn't have `getComputedStyle`
 	if (!prop || !window.getComputedStyle) {
@@ -1178,7 +1275,7 @@
 
 
 /***/ },
-/* 15 */
+/* 17 */
 /***/ function(module, exports) {
 
 	
@@ -1345,7 +1442,7 @@
 
 
 /***/ },
-/* 16 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -1353,8 +1450,8 @@
 	 * Module dependencies.
 	 */
 	
-	var events = __webpack_require__(17);
-	var delegate = __webpack_require__(18);
+	var events = __webpack_require__(19);
+	var delegate = __webpack_require__(20);
 	
 	/**
 	 * Expose `Events`.
@@ -1527,7 +1624,7 @@
 
 
 /***/ },
-/* 17 */
+/* 19 */
 /***/ function(module, exports) {
 
 	var bind = window.addEventListener ? 'addEventListener' : 'attachEvent',
@@ -1567,15 +1664,15 @@
 	};
 
 /***/ },
-/* 18 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 	
-	var closest = __webpack_require__(19)
-	  , event = __webpack_require__(17);
+	var closest = __webpack_require__(21)
+	  , event = __webpack_require__(19);
 	
 	/**
 	 * Delegate event `type` to `selector`
@@ -1615,14 +1712,14 @@
 
 
 /***/ },
-/* 19 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module Dependencies
 	 */
 	
-	var matches = __webpack_require__(20)
+	var matches = __webpack_require__(22)
 	
 	/**
 	 * Export `closest`
@@ -1653,14 +1750,14 @@
 
 
 /***/ },
-/* 20 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 	
-	var query = __webpack_require__(21);
+	var query = __webpack_require__(23);
 	
 	/**
 	 * Element prototype.
@@ -1705,7 +1802,7 @@
 
 
 /***/ },
-/* 21 */
+/* 23 */
 /***/ function(module, exports) {
 
 	function one(selector, el) {
@@ -1732,7 +1829,7 @@
 
 
 /***/ },
-/* 22 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -1740,10 +1837,10 @@
 	 * Module dependencies.
 	 */
 	
-	var Emitter = __webpack_require__(15);
-	var clone = __webpack_require__(23);
-	var type = __webpack_require__(24);
-	var ease = __webpack_require__(25);
+	var Emitter = __webpack_require__(17);
+	var clone = __webpack_require__(25);
+	var type = __webpack_require__(26);
+	var ease = __webpack_require__(27);
 	
 	/**
 	 * Expose `Tween`.
@@ -1915,7 +2012,7 @@
 	};
 
 /***/ },
-/* 23 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1924,9 +2021,9 @@
 	
 	var type;
 	try {
-	  type = __webpack_require__(24);
+	  type = __webpack_require__(26);
 	} catch (_) {
-	  type = __webpack_require__(24);
+	  type = __webpack_require__(26);
 	}
 	
 	/**
@@ -1978,7 +2075,7 @@
 
 
 /***/ },
-/* 24 */
+/* 26 */
 /***/ function(module, exports) {
 
 	/**
@@ -2018,7 +2115,7 @@
 
 
 /***/ },
-/* 25 */
+/* 27 */
 /***/ function(module, exports) {
 
 	
@@ -2194,7 +2291,7 @@
 
 
 /***/ },
-/* 26 */
+/* 28 */
 /***/ function(module, exports) {
 
 	/**
@@ -2234,7 +2331,7 @@
 
 
 /***/ },
-/* 27 */
+/* 29 */
 /***/ function(module, exports) {
 
 	module.exports = throttle;
@@ -2272,10 +2369,80 @@
 
 
 /***/ },
-/* 28 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var detect = __webpack_require__(9)
+	
+	/**
+	 * Module dependencies.
+	 */
+	
+	var now = __webpack_require__(31);
+	
+	/**
+	 * Returns a function, that, as long as it continues to be invoked, will not
+	 * be triggered. The function will be called after it stops being called for
+	 * N milliseconds. If `immediate` is passed, trigger the function on the
+	 * leading edge, instead of the trailing.
+	 *
+	 * @source underscore.js
+	 * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
+	 * @param {Function} function to wrap
+	 * @param {Number} timeout in ms (`100`)
+	 * @param {Boolean} whether to execute at the beginning (`false`)
+	 * @api public
+	 */
+	
+	module.exports = function debounce(func, wait, immediate){
+	  var timeout, args, context, timestamp, result;
+	  if (null == wait) wait = 100;
+	
+	  function later() {
+	    var last = now() - timestamp;
+	
+	    if (last < wait && last > 0) {
+	      timeout = setTimeout(later, wait - last);
+	    } else {
+	      timeout = null;
+	      if (!immediate) {
+	        result = func.apply(context, args);
+	        if (!timeout) context = args = null;
+	      }
+	    }
+	  };
+	
+	  return function debounced() {
+	    context = this;
+	    args = arguments;
+	    timestamp = now();
+	    var callNow = immediate && !timeout;
+	    if (!timeout) timeout = setTimeout(later, wait);
+	    if (callNow) {
+	      result = func.apply(context, args);
+	      context = args = null;
+	    }
+	
+	    return result;
+	  };
+	};
+
+
+/***/ },
+/* 31 */
+/***/ function(module, exports) {
+
+	module.exports = Date.now || now
+	
+	function now() {
+	    return new Date().getTime()
+	}
+
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var detect = __webpack_require__(11)
 	var has3d = detect.has3d
 	var transform = detect.transform
 	
@@ -2332,13 +2499,146 @@
 
 
 /***/ },
-/* 29 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var classes = __webpack_require__(30)
+	'use strict'
+	
+	var toPX = __webpack_require__(34)
+	
+	module.exports = mouseWheelListen
+	
+	function mouseWheelListen(element, callback, noScroll) {
+	  if(typeof element === 'function') {
+	    noScroll = !!callback
+	    callback = element
+	    element = window
+	  }
+	  var lineHeight = toPX('ex', element)
+	  var listener = function(ev) {
+	    if(noScroll) {
+	      ev.preventDefault()
+	    }
+	    var dx = ev.deltaX || 0
+	    var dy = ev.deltaY || 0
+	    var dz = ev.deltaZ || 0
+	    var mode = ev.deltaMode
+	    var scale = 1
+	    switch(mode) {
+	      case 1:
+	        scale = lineHeight
+	      break
+	      case 2:
+	        scale = window.innerHeight
+	      break
+	    }
+	    dx *= scale
+	    dy *= scale
+	    dz *= scale
+	    if(dx || dy || dz) {
+	      return callback(dx, dy, dz)
+	    }
+	  }
+	  element.addEventListener('wheel', listener)
+	  return listener
+	}
+
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict'
+	
+	var parseUnit = __webpack_require__(35)
+	
+	module.exports = toPX
+	
+	var PIXELS_PER_INCH = 96
+	
+	function getPropertyInPX(element, prop) {
+	  var parts = parseUnit(getComputedStyle(element).getPropertyValue(prop))
+	  return parts[0] * toPX(parts[1], element)
+	}
+	
+	//This brutal hack is needed
+	function getSizeBrutal(unit, element) {
+	  var testDIV = document.createElement('div')
+	  testDIV.style['font-size'] = '128' + unit
+	  element.appendChild(testDIV)
+	  var size = getPropertyInPX(testDIV, 'font-size') / 128
+	  element.removeChild(testDIV)
+	  return size
+	}
+	
+	function toPX(str, element) {
+	  element = element || document.body
+	  str = (str || 'px').trim().toLowerCase()
+	  if(element === window || element === document) {
+	    element = document.body 
+	  }
+	  switch(str) {
+	    case '%':  //Ambiguous, not sure if we should use width or height
+	      return element.clientHeight / 100.0
+	    case 'ch':
+	    case 'ex':
+	      return getSizeBrutal(str, element)
+	    case 'em':
+	      return getPropertyInPX(element, 'font-size')
+	    case 'rem':
+	      return getPropertyInPX(document.body, 'font-size')
+	    case 'vw':
+	      return window.innerWidth/100
+	    case 'vh':
+	      return window.innerHeight/100
+	    case 'vmin':
+	      return Math.min(window.innerWidth, window.innerHeight) / 100
+	    case 'vmax':
+	      return Math.max(window.innerWidth, window.innerHeight) / 100
+	    case 'in':
+	      return PIXELS_PER_INCH
+	    case 'cm':
+	      return PIXELS_PER_INCH / 2.54
+	    case 'mm':
+	      return PIXELS_PER_INCH / 25.4
+	    case 'pt':
+	      return PIXELS_PER_INCH / 72
+	    case 'pc':
+	      return PIXELS_PER_INCH / 6
+	  }
+	  return 1
+	}
+
+/***/ },
+/* 35 */
+/***/ function(module, exports) {
+
+	module.exports = function parseUnit(str, out) {
+	    if (!out)
+	        out = [ 0, '' ]
+	
+	    str = String(str)
+	    var num = parseFloat(str, 10)
+	    out[0] = num
+	    out[1] = str.match(/[\d.\-\+]*\s*(.*)/)[1] || ''
+	    return out
+	}
+
+/***/ },
+/* 36 */
+/***/ function(module, exports) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = 'ontouchstart' in global || (global.DocumentTouch && document instanceof DocumentTouch)
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var classes = __webpack_require__(38)
 	var domify = __webpack_require__(7)
-	var once = __webpack_require__(32)
-	var template = __webpack_require__(34)
+	var once = __webpack_require__(40)
+	var template = __webpack_require__(42)
 	
 	function prepend(parentNode, node) {
 	  if (parentNode.firstChild) {
@@ -2453,14 +2753,14 @@
 
 
 /***/ },
-/* 30 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 	
-	var index = __webpack_require__(31);
+	var index = __webpack_require__(39);
 	
 	/**
 	 * Whitespace regexp.
@@ -2646,7 +2946,7 @@
 
 
 /***/ },
-/* 31 */
+/* 39 */
 /***/ function(module, exports) {
 
 	module.exports = function(arr, obj){
@@ -2658,10 +2958,10 @@
 	};
 
 /***/ },
-/* 32 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var wrappy = __webpack_require__(33)
+	var wrappy = __webpack_require__(41)
 	module.exports = wrappy(once)
 	
 	once.proto = once(function () {
@@ -2685,7 +2985,7 @@
 
 
 /***/ },
-/* 33 */
+/* 41 */
 /***/ function(module, exports) {
 
 	// Returns a wrapper function that returns a wrapped callback
@@ -2724,7 +3024,7 @@
 
 
 /***/ },
-/* 34 */
+/* 42 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"ptr_box\">\n  <div class=\"ptr_container\">\n    <div class=\"ptr_image\"></div>\n  </div>\n</div>\n";
